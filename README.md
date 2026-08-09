@@ -1,26 +1,44 @@
+<div align="center">
+
 # Olist Dispute Desk
 
-**Multi-agent e-commerce dispute investigation** with a deterministic refund policy and an internal ops console.
+### Multi-agent e-commerce dispute investigation
 
-> Customer claims are not trusted by default. Agents investigate order / payment / delivery evidence from PostgreSQL, a policy engine computes refunds in code, and a verifier checks the result before it reaches the UI.
+*Agents investigate order · payment · delivery evidence from PostgreSQL — a deterministic policy engine computes refunds in code, and a verifier signs off before anything reaches the UI.*
 
-[![Python](https://img.shields.io/badge/Python-3.11%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
-[![FastAPI](https://img.shields.io/badge/FastAPI-Backend-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
-[![React](https://img.shields.io/badge/React-Vite-61DAFB?logo=react&logoColor=black)](https://vitejs.dev/)
-[![LangGraph](https://img.shields.io/badge/LangGraph-Multi--Agent-1C3C3C)](https://langchain-ai.github.io/langgraph/)
-[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-4169E1?logo=postgresql&logoColor=white)](https://www.postgresql.org/)
-[![OpenRouter](https://img.shields.io/badge/OpenRouter-GPT--5--Nano-black)](https://openrouter.ai/openai/gpt-5-nano)
+<br/>
+
+[![Python](https://img.shields.io/badge/Python-3.11%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-Backend-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
+[![React](https://img.shields.io/badge/React-Vite-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://vitejs.dev/)
+[![LangGraph](https://img.shields.io/badge/LangGraph-Multi--Agent-1C3C3C?style=for-the-badge)](https://langchain-ai.github.io/langgraph/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+[![OpenRouter](https://img.shields.io/badge/OpenRouter-GPT--5--Nano-000000?style=for-the-badge&logo=openai&logoColor=white)](https://openrouter.ai/openai/gpt-5-nano)
+
+<br/>
+
+**[Features](#features) · [Architecture](#architecture) · [Tech stack](#tech-stack) · [Policy](#policy-ec_policy_v1) · [Quick start](#quick-start) · [API](#api-surface-mvp) · [Design](#design-principles)**
+
+</div>
+
+---
+
+## What is this?
+
+> **Customer claims are not trusted by default.** A support agent opens a case against an Olist `order_id`; a supervisor **Coordinator** dispatches three specialist agents (Order/Seller, Payment, Delivery) that read only *facts* from PostgreSQL. Their findings land on a shared **Evidence Board**, a **deterministic policy engine** decides the refund, and a **Verifier** gates the result — so the money math is auditable and the LLM never invents data.
 
 ---
 
 ## Features
 
-- **Dispute Desk UI** — create cases from live Olist orders, run investigations, review evidence, approve / reject recommendations
-- **Multi-agent pipeline** — Coordinator + Order/Seller, Payment, Delivery specialists in parallel
-- **Deterministic policy** — refunds and actions come from `EC_POLICY_V1` code, not LLM arithmetic
-- **Grounded evidence IDs** — only IDs that resolve to PostgreSQL records
-- **Run history** — snapshots stored in `dispute_desk.*` tables (timeline, reports, final JSON)
-- **Batch mode** — optional `input/EC_001.json` … `EC_050.json` via the CLI runner
+| | |
+| --- | --- |
+| **Dispute Desk UI** | Create cases from live Olist orders, run investigations, review evidence, approve / reject |
+| **Multi-agent pipeline** | Coordinator + Order/Seller, Payment, Delivery specialists running in parallel |
+| **Deterministic policy** | Refunds and actions come from `EC_POLICY_V1` code — never LLM arithmetic |
+| **Grounded evidence IDs** | Only IDs that resolve to real PostgreSQL records make it to output |
+| **Run history** | Snapshots stored in `dispute_desk.*` tables (timeline, reports, final JSON) |
+| **Batch mode** | Optional `input/EC_001.json … EC_050.json` via the CLI runner |
 
 ---
 

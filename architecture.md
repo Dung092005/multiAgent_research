@@ -1,4 +1,21 @@
+<div align="center">
+
 # System Architecture
+
+**Centralized Supervisor · Parallel Specialists · Shared Evidence Board · Deterministic Policy & Verification**
+
+<sub>Design notes for the Olist multi-agent dispute investigation pipeline.</sub>
+
+</div>
+
+---
+
+> [!NOTE]
+> **Đọc nhanh:** Coordinator điều phối → 3 specialist (Order/Seller, Payment, Delivery) điều tra song song từ PostgreSQL → Evidence Board → Deterministic Policy Engine tính hoàn tiền bằng code → Verifier kiểm chứng → ghi output. LLM (`openai/gpt-5-nano` qua OpenRouter) chỉ diễn giải, **không** tự viết SQL hay tự tính tiền.
+
+**Mục lục:** [Tổng quan](#1-tổng-quan) · [Quyết định kiến trúc](#3-các-quyết-định-kiến-trúc-chính) · [Kiến trúc tổng thể](#4-kiến-trúc-tổng-thể) · [Thành phần](#5-thành-phần-hệ-thống) · [Giao tiếp A2A](#6-agent-to-agent-communication) · [Workflow](#7-workflow-xử-lý-một-case) · [PostgreSQL](#10-thiết-kế-postgresql) · [Policy Engine](#12-deterministic-policy-engine) · [Kết luận](#27-kết-luận)
+
+---
 
 ## 1. Tổng quan
 
@@ -26,7 +43,7 @@ Trong đó:
 * Chính sách hoàn tiền được tính bằng code xác định thay vì để LLM tự tính.
 * Một **Verifier Agent** kiểm tra kết quả trước khi ghi ra file.
 * PostgreSQL là nguồn dữ liệu có thẩm quyền duy nhất.
-* Tất cả LLM được gọi thông qua OpenRouter; model mặc định dưới ~10B tham số.
+* Tất cả LLM được gọi thông qua OpenRouter; model mặc định là `openai/gpt-5-nano`.
 
 ---
 
@@ -1355,7 +1372,7 @@ Giá trị cuối cùng phải được clamp vào `[0, 1]`.
 
 ---
 
-## 17. OpenRouter và lựa chọn model (dưới ~10B)
+## 17. OpenRouter và lựa chọn model
 
 ### 17.1. Model configuration
 
