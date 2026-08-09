@@ -1,0 +1,39 @@
+version: EC_POLICY_V1
+rules:
+  - primary_issue: canceled_order_paid
+    root_cause: ORDER_CANCELED_AFTER_PAYMENT
+    party_type: platform
+    party_id: OLIST_PLATFORM
+    refund_basis: payment_total
+    action: issue_full_refund
+  - primary_issue: unavailable_order_paid
+    root_cause: ORDER_UNAVAILABLE_AFTER_PAYMENT
+    party_type: platform
+    party_id: OLIST_PLATFORM
+    refund_basis: payment_total
+    action: issue_full_refund
+  - primary_issue: late_delivery_seller
+    root_cause: SELLER_HANDOFF_AFTER_LIMIT
+    party_type: seller
+    party_id: late_sellers
+    refund_basis: freight_total
+    action: refund_freight
+  - primary_issue: late_delivery_logistics
+    root_cause: CARRIER_DELIVERED_AFTER_ESTIMATE
+    party_type: logistics_provider
+    party_id: LOGISTICS_PROVIDER
+    refund_basis: freight_total
+    action: refund_freight
+  - primary_issue: valid_split_payment
+    root_cause: MULTIPLE_PAYMENTS_RECONCILED
+    party_type: null
+    party_id: null
+    refund_basis: zero
+    action: explain_valid_split_payment
+  - primary_issue: unsupported_late_claim
+    root_cause: DELIVERY_WITHIN_ESTIMATE
+    party_type: null
+    party_id: null
+    refund_basis: zero
+    action: reject_late_refund
+

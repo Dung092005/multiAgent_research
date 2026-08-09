@@ -1,0 +1,16 @@
+.git
+.env
+.venv
+__pycache__
+*.pyc
+.pytest_cache
+.ruff_cache
+data
+input
+output
+logging
+trace.jsonl
+metadata.json
+output_export.zip
+output*.zip
+

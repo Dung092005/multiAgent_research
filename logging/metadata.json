@@ -1,0 +1,12 @@
+{
+  "project": "olist-multi-agent-disputes",
+  "framework": "LangGraph",
+  "llm": {
+    "provider": "OpenRouter",
+    "model_id": "openai/gpt-5-nano",
+    "parameter_count_b": null,
+    "model_family": "GPT-5 Nano"
+  },
+  "runtime": "Python 3.11+ / PostgreSQL 16 / Docker Compose",
+  "notes": "Metadata đầy đủ được ghi lại sau mỗi lần chạy batch vào logging/metadata.json."
+}

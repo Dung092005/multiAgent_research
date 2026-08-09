@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Olist Dispute Desk - Cases</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-secondary": "#ffffff",
+                      "secondary-container": "#dae2fd",
+                      "primary-container": "#008378",
+                      "primary-fixed": "#89f5e7",
+                      "surface-container-high": "#dce9ff",
+                      "on-secondary-container": "#5c647a",
+                      "outline-variant": "#bcc9c6",
+                      "on-tertiary": "#ffffff",
+                      "on-background": "#0b1c30",
+                      "secondary": "#565e74",
+                      "on-secondary-fixed": "#131b2e",
+                      "on-error": "#ffffff",
+                      "surface-container-low": "#eff4ff",
+                      "error-container": "#ffdad6",
+                      "error": "#ba1a1a",
+                      "outline": "#6d7a77",
+                      "inverse-on-surface": "#eaf1ff",
+                      "surface-container": "#e5eeff",
+                      "inverse-surface": "#213145",
+                      "primary-fixed-dim": "#6bd8cb",
+                      "secondary-fixed-dim": "#bec6e0",
+                      "on-tertiary-fixed": "#0d1c2f",
+                      "inverse-primary": "#6bd8cb",
+                      "surface-tint": "#006a61",
+                      "surface-dim": "#cbdbf5",
+                      "on-secondary-fixed-variant": "#3f465c",
+                      "tertiary": "#4f5d72",
+                      "surface-bright": "#f8f9ff",
+                      "on-tertiary-container": "#fdfcff",
+                      "surface-container-lowest": "#ffffff",
+                      "on-tertiary-fixed-variant": "#3a485c",
+                      "on-surface-variant": "#3d4947",
+                      "on-surface": "#0b1c30",
+                      "on-primary-fixed": "#00201d",
+                      "tertiary-fixed-dim": "#b9c7e0",
+                      "on-primary": "#ffffff",
+                      "on-error-container": "#93000a",
+                      "on-primary-container": "#f4fffc",
+                      "surface-container-highest": "#d3e4fe",
+                      "background": "#f8f9ff",
+                      "tertiary-fixed": "#d5e3fd",
+                      "surface": "#f8f9ff",
+                      "secondary-fixed": "#dae2fd",
+                      "surface-variant": "#d3e4fe",
+                      "primary": "#00685f",
+                      "tertiary-container": "#67758c",
+                      "on-primary-fixed-variant": "#005049"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "md": "16px",
+                      "xs": "4px",
+                      "base": "4px",
+                      "xl": "32px",
+                      "margin-mobile": "16px",
+                      "gutter": "20px",
+                      "sm": "8px",
+                      "margin-desktop": "32px",
+                      "lg": "24px"
+              },
+              "fontFamily": {
+                      "label-xs": ["Geist", "sans-serif"],
+                      "title-lg": ["Inter", "sans-serif"],
+                      "body-lg": ["Inter", "sans-serif"],
+                      "headline-sm": ["Geist", "sans-serif"],
+                      "body-md": ["Inter", "sans-serif"],
+                      "body-sm": ["Inter", "sans-serif"],
+                      "display-lg": ["Geist", "sans-serif"],
+                      "label-md": ["Geist", "sans-serif"],
+                      "headline-md": ["Geist", "sans-serif"]
+              },
+              "fontSize": {
+                      "label-xs": ["11px", {"lineHeight": "14px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                      "title-lg": ["18px", {"lineHeight": "24px", "fontWeight": "600"}],
+                      "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                      "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                      "display-lg": ["30px", {"lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                      "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                      "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        /* Base styles to ensure consistency if tailwind misses something in specific browsers */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: theme('colors.background');
+            color: theme('colors.on-surface');
+        }
+        
+        /* Minimal custom scrollbar for data density */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: theme('colors.outline-variant'); 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: theme('colors.outline'); 
+        }
+
+        /* Material Symbols utility */
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        
+        .material-symbols-outlined.fill {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface h-screen w-screen overflow-hidden flex font-body-md text-body-md">
+<!-- SideNavBar (Shared Component Blueprint) -->
+<nav class="bg-inverse-surface border-r border-outline-variant fixed left-0 top-0 h-full w-[260px] flex flex-col h-full py-lg px-md z-20">
+<!-- Header / Brand -->
+<div class="flex items-center gap-sm mb-xl px-sm">
+<div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-on-primary-container text-[18px]">balance</span>
+</div>
+<div>
+<h1 class="font-headline-sm text-headline-sm text-on-primary-container font-black tracking-tight leading-tight">Olist Dispute Desk</h1>
+<p class="font-label-xs text-label-xs text-primary-fixed opacity-70 uppercase tracking-widest">Demo Environment</p>
+</div>
+</div>
+<!-- Navigation Tabs -->
+<ul class="flex flex-col gap-base flex-grow">
+<!-- Active Tab -->
+<li>
+<a class="flex items-center gap-md px-sm py-[8px] rounded-DEFAULT bg-primary-container text-on-primary-container font-bold transition-colors duration-150 group" href="#">
+<span class="material-symbols-outlined text-[20px] fill">folder_open</span>
+<span class="font-label-md text-label-md">Cases</span>
+</a>
+</li>
+<!-- Inactive Tabs -->
+<li>
+<a class="flex items-center gap-md px-sm py-[8px] rounded-DEFAULT text-on-surface-variant hover:bg-surface-container-highest transition-colors duration-150 group" href="#">
+<span class="material-symbols-outlined text-[20px] group-hover:text-primary">query_stats</span>
+<span class="font-label-md text-label-md">Run Investigation</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-md px-sm py-[8px] rounded-DEFAULT text-on-surface-variant hover:bg-surface-container-highest transition-colors duration-150 group" href="#">
+<span class="material-symbols-outlined text-[20px] group-hover:text-primary">analytics</span>
+<span class="font-label-md text-label-md">Evidence Board</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-md px-sm py-[8px] rounded-DEFAULT text-on-surface-variant hover:bg-surface-container-highest transition-colors duration-150 group" href="#">
+<span class="material-symbols-outlined text-[20px] group-hover:text-primary">policy</span>
+<span class="font-label-md text-label-md">Policy Rules</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-md px-sm py-[8px] rounded-DEFAULT text-on-surface-variant hover:bg-surface-container-highest transition-colors duration-150 group" href="#">
+<span class="material-symbols-outlined text-[20px] group-hover:text-primary">history</span>
+<span class="font-label-md text-label-md">History</span>
+</a>
+</li>
+</ul>
+<!-- Bottom Tab -->
+<ul class="flex flex-col mt-auto pt-md border-t border-inverse-on-surface/10">
+<li>
+<a class="flex items-center gap-md px-sm py-[8px] rounded-DEFAULT text-on-surface-variant hover:bg-surface-container-highest transition-colors duration-150 group" href="#">
+<span class="material-symbols-outlined text-[20px] group-hover:text-primary">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</li>
+<li class="mt-md px-sm flex items-center gap-sm">
+<img alt="Agent Profile Avatar" class="w-8 h-8 rounded-full object-cover border border-outline-variant" data-alt="A small, professional headshot of an investigative agent in a brightly lit modern office setting, tight crop, sharp focus." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDGU5l-FXENjjc7Vp6x94zQyNRhzikdf-4hrUOOlNZPeytd5Xp3w5IShbS-xzjwi7YGGbpFx5mUwrEnNJZGxhvqL9-qez_jkqdAJVw1B2ilBEUNGEyEiw70P91Ezq-_aZoAr46DqZNxlMcJRpW2gDtPxwZ0aFzw7GlCN-l0yO9_DGvqeRYsJ_YFgNzNimM5NI_Uiu1cQX5c0V2NtPXyy8P-8pGWfkOOGa9cpyisI8NNONpaHTOV1iQO"/>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-inverse-on-surface">Agent J. Doe</span>
+<span class="font-label-xs text-label-xs text-on-surface-variant">L2 Specialist</span>
+</div>
+</li>
+</ul>
+</nav>
+<!-- Main Workspace Area -->
+<div class="flex flex-col flex-1 ml-[260px] h-full w-[calc(100%-260px)] relative">
+<!-- TopNavBar (Shared Component Blueprint) -->
+<header class="bg-surface border-b border-outline-variant docked full-width top-0 flex items-center justify-between h-16 px-margin-desktop z-10 shrink-0">
+<div class="flex items-center gap-md">
+<!-- Top Nav specific title/breadcrumb area if needed, keeping minimal per JSON -->
+<span class="font-title-lg text-title-lg text-primary font-medium tracking-tight">Active Queue</span>
+</div>
+<div class="flex items-center gap-lg">
+<!-- Search on right per JSON config intention -->
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-sm text-on-surface-variant text-[18px]">search</span>
+<input class="pl-xl pr-md py-xs rounded-full border border-outline-variant bg-surface-container-lowest focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none font-body-sm text-body-sm text-on-surface w-64 transition-all placeholder:text-on-surface-variant/60" placeholder="Global search..." type="text"/>
+</div>
+<div class="flex items-center gap-sm">
+<button class="w-8 h-8 flex items-center justify-center rounded-full text-on-surface-variant hover:text-primary hover:bg-surface-container-highest transition-all relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-[6px] right-[6px] w-[6px] h-[6px] bg-error rounded-full"></span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-full text-on-surface-variant hover:text-primary hover:bg-surface-container-highest transition-all">
+<span class="material-symbols-outlined">help_outline</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Page Content Canvas -->
+<main class="flex-1 overflow-y-auto p-margin-desktop bg-surface relative">
+<!-- Page Header Row -->
+<div class="flex items-end justify-between mb-xl">
+<div>
+<h2 class="font-display-lg text-display-lg text-on-surface mb-xs">Cases</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Manage and resolve active dispute investigations.</p>
+</div>
+<button class="flex items-center gap-xs px-lg py-sm bg-primary text-on-primary rounded-DEFAULT hover:bg-primary-fixed hover:text-on-primary-fixed transition-colors shadow-sm font-label-md text-label-md font-medium">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                    New investigation
+                </button>
+</div>
+<!-- Contextual Dashboard/Bento Summary (High-end UI pattern injection) -->
+<div class="grid grid-cols-4 gap-gutter mb-xl">
+<div class="bg-surface-container-lowest border border-outline-variant p-md rounded-lg flex flex-col justify-between shadow-[0px_2px_4px_rgba(15,23,42,0.02)]">
+<div class="flex items-center justify-between mb-sm">
+<span class="font-label-md text-label-md text-on-surface-variant">Action Required</span>
+<span class="material-symbols-outlined text-error text-[18px]">warning</span>
+</div>
+<div class="flex items-baseline gap-sm">
+<span class="font-headline-md text-headline-md text-on-surface">14</span>
+<span class="font-label-xs text-label-xs text-error font-bold flex items-center"><span class="material-symbols-outlined text-[12px]">arrow_upward</span> 2</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant p-md rounded-lg flex flex-col justify-between shadow-[0px_2px_4px_rgba(15,23,42,0.02)]">
+<div class="flex items-center justify-between mb-sm">
+<span class="font-label-md text-label-md text-on-surface-variant">Needs Review</span>
+<span class="material-symbols-outlined text-primary text-[18px]">pending_actions</span>
+</div>
+<div class="flex items-baseline gap-sm">
+<span class="font-headline-md text-headline-md text-on-surface">42</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant p-md rounded-lg flex flex-col justify-between shadow-[0px_2px_4px_rgba(15,23,42,0.02)]">
+<div class="flex items-center justify-between mb-sm">
+<span class="font-label-md text-label-md text-on-surface-variant">Avg. Resolution Time</span>
+<span class="material-symbols-outlined text-secondary text-[18px]">timer</span>
+</div>
+<div class="flex items-baseline gap-sm">
+<span class="font-headline-md text-headline-md text-on-surface">2.4</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">days</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant p-md rounded-lg flex flex-col justify-between shadow-[0px_2px_4px_rgba(15,23,42,0.02)] relative overflow-hidden">
+<div class="absolute inset-0 bg-primary opacity-5"></div>
+<div class="relative z-10 flex flex-col h-full justify-between">
+<div class="flex items-center justify-between mb-sm">
+<span class="font-label-md text-label-md text-primary font-bold">System Health</span>
+<span class="material-symbols-outlined text-primary text-[18px]">check_circle</span>
+</div>
+<div class="font-body-sm text-body-sm text-on-surface">Automated rules processing normally.</div>
+</div>
+</div>
+</div>
+<!-- Filters Bar -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-t-lg p-sm flex items-center justify-between gap-md border-b-0">
+<div class="flex items-center gap-sm overflow-x-auto no-scrollbar">
+<!-- Search Filter -->
+<div class="relative flex items-center min-w-[200px]">
+<span class="material-symbols-outlined absolute left-sm text-on-surface-variant text-[16px]">search</span>
+<input class="w-full pl-lg pr-sm py-[6px] rounded-DEFAULT border border-outline-variant bg-surface focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none font-body-sm text-body-sm text-on-surface placeholder:text-on-surface-variant/60" placeholder="Search case_id or order_id..." type="text"/>
+</div>
+<div class="w-[1px] h-6 bg-outline-variant mx-xs"></div>
+<!-- Status Dropdown (Visual representation) -->
+<button class="flex items-center gap-xs px-sm py-[6px] border border-outline-variant rounded-DEFAULT bg-surface hover:bg-surface-container-highest transition-colors font-label-md text-label-md text-on-surface whitespace-nowrap">
+                        Status: <span class="font-bold">All</span>
+<span class="material-symbols-outlined text-[16px] ml-xs">arrow_drop_down</span>
+</button>
+<!-- Primary Issue Dropdown -->
+<button class="flex items-center gap-xs px-sm py-[6px] border border-outline-variant rounded-DEFAULT bg-surface hover:bg-surface-container-highest transition-colors font-label-md text-label-md text-on-surface whitespace-nowrap">
+                        Primary Issue
+                        <span class="material-symbols-outlined text-[16px] ml-xs">arrow_drop_down</span>
+</button>
+<!-- Date Range -->
+<button class="flex items-center gap-xs px-sm py-[6px] border border-outline-variant rounded-DEFAULT bg-surface hover:bg-surface-container-highest transition-colors font-label-md text-label-md text-on-surface whitespace-nowrap">
+<span class="material-symbols-outlined text-[16px]">calendar_today</span>
+                        Last 7 Days
+                        <span class="material-symbols-outlined text-[16px] ml-xs">arrow_drop_down</span>
+</button>
+</div>
+<div class="flex items-center gap-sm shrink-0">
+<button class="text-primary hover:text-primary-fixed-dim font-label-md text-label-md transition-colors flex items-center gap-xs">
+<span class="material-symbols-outlined text-[16px]">filter_alt_off</span> Clear
+                    </button>
+<button class="p-[6px] border border-outline-variant rounded-DEFAULT text-on-surface-variant hover:bg-surface-container-highest transition-colors">
+<span class="material-symbols-outlined text-[18px]">view_column</span>
+</button>
+</div>
+</div>
+<!-- Data Table (Strict B2B Design) -->
+<div class="border border-outline-variant rounded-b-lg bg-surface-container-lowest overflow-x-auto">
+<table class="w-full text-left border-collapse whitespace-nowrap">
+<thead>
+<tr class="border-b border-outline-variant bg-surface-bright">
+<th class="px-md py-sm font-label-xs text-label-xs text-on-surface-variant uppercase tracking-wider w-24">Case ID</th>
+<th class="px-md py-sm font-label-xs text-label-xs text-on-surface-variant uppercase tracking-wider w-32">Order ID</th>
+<th class="px-md py-sm font-label-xs text-label-xs text-on-surface-variant uppercase tracking-wider max-w-[200px]">Claim Snippet</th>
+<th class="px-md py-sm font-label-xs text-label-xs text-on-surface-variant uppercase tracking-wider w-40">Primary Issue</th>
+<th class="px-md py-sm font-label-xs text-label-xs text-on-surface-variant uppercase tracking-wider w-36">Status</th>
+<th class="px-md py-sm font-label-xs text-label-xs text-on-surface-variant uppercase tracking-wider text-right w-32">Rec. Refund</th>
+<th class="px-md py-sm font-label-xs text-label-xs text-on-surface-variant uppercase tracking-wider w-32">Confidence</th>
+<th class="px-md py-sm font-label-xs text-label-xs text-on-surface-variant uppercase tracking-wider w-24">Updated</th>
+<th class="px-md py-sm font-label-xs text-label-xs text-on-surface-variant uppercase tracking-wider text-right w-20">Action</th>
+</tr>
+</thead>
+<tbody class="font-body-sm text-body-sm text-on-surface divide-y divide-outline-variant/50">
+<!-- ROW 1 (Mandatory Data) -->
+<tr class="hover:bg-surface-container-low transition-colors duration-150 group">
+<td class="px-md py-sm font-label-md text-label-md text-primary font-medium cursor-pointer">EC_001</td>
+<td class="px-md py-sm font-body-sm text-body-sm text-on-surface-variant">ORD-10928-A</td>
+<td class="px-md py-sm">
+<div class="truncate max-w-[200px] text-on-surface" title="Item never arrived at destination facility despite carrier marking it as delivered in system.">
+                                    Item never arrived at destination...
+                                </div>
+</td>
+<td class="px-md py-sm">
+<span class="inline-flex items-center px-[6px] py-[2px] rounded-full bg-secondary-container/30 text-on-surface-variant font-label-xs text-label-xs border border-outline-variant/30">
+                                    late_delivery_seller
+                                </span>
+</td>
+<td class="px-md py-sm">
+<span class="inline-flex items-center gap-[4px] px-[8px] py-[2px] rounded-full bg-error-container text-on-error-container font-label-xs text-label-xs font-bold shadow-sm">
+<span class="w-[6px] h-[6px] rounded-full bg-error"></span>
+                                    action_required
+                                </span>
+</td>
+<td class="px-md py-sm text-right font-label-md text-label-md">12.04 BRL</td>
+<td class="px-md py-sm">
+<div class="flex items-center gap-sm">
+<span class="font-label-xs text-label-xs text-on-surface-variant w-8">0.96</span>
+<!-- Segmented Confidence Bar: 0.96 is high, almost full teal -->
+<div class="flex h-[6px] w-16 gap-[1px] bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full w-full bg-primary opacity-20"></div>
+<div class="h-full w-full bg-primary opacity-40"></div>
+<div class="h-full w-full bg-primary opacity-70"></div>
+<div class="h-full w-full bg-primary border-[1px] border-surface-container-lowest"></div>
+<div class="h-full w-full bg-transparent"></div>
+</div>
+</div>
+</td>
+<td class="px-md py-sm text-on-surface-variant text-[12px]">2m ago</td>
+<td class="px-md py-sm text-right">
+<button class="px-sm py-[4px] bg-surface border border-outline-variant rounded-DEFAULT text-on-surface font-label-md text-label-md hover:bg-surface-container-highest transition-colors focus:ring-2 focus:ring-primary/20 outline-none">
+                                    Open
+                                </button>
+</td>
+</tr>
+<!-- ROW 2 (Realistic filler) -->
+<tr class="hover:bg-surface-container-low transition-colors duration-150 group">
+<td class="px-md py-sm font-label-md text-label-md text-primary font-medium cursor-pointer">EC_084</td>
+<td class="px-md py-sm font-body-sm text-body-sm text-on-surface-variant">ORD-99212-B</td>
+<td class="px-md py-sm">
+<div class="truncate max-w-[200px] text-on-surface" title="Product arrived damaged, box was crushed during transit.">
+                                    Product arrived damaged, box...
+                                </div>
+</td>
+<td class="px-md py-sm">
+<span class="inline-flex items-center px-[6px] py-[2px] rounded-full bg-secondary-container/30 text-on-surface-variant font-label-xs text-label-xs border border-outline-variant/30">
+                                    damaged_item
+                                </span>
+</td>
+<td class="px-md py-sm">
+<span class="inline-flex items-center gap-[4px] px-[8px] py-[2px] rounded-full bg-surface-container-highest text-primary font-label-xs text-label-xs font-bold">
+<span class="w-[6px] h-[6px] rounded-full bg-primary"></span>
+                                    needs_review
+                                </span>
+</td>
+<td class="px-md py-sm text-right font-label-md text-label-md">145.00 BRL</td>
+<td class="px-md py-sm">
+<div class="flex items-center gap-sm">
+<span class="font-label-xs text-label-xs text-on-surface-variant w-8">0.45</span>
+<!-- Segmented Confidence Bar: mid range -->
+<div class="flex h-[6px] w-16 gap-[1px] bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full w-full bg-secondary opacity-40"></div>
+<div class="h-full w-full bg-secondary border-[1px] border-surface-container-lowest"></div>
+<div class="h-full w-full bg-transparent"></div>
+<div class="h-full w-full bg-transparent"></div>
+<div class="h-full w-full bg-transparent"></div>
+</div>
+</div>
+</td>
+<td class="px-md py-sm text-on-surface-variant text-[12px]">1hr ago</td>
+<td class="px-md py-sm text-right">
+<button class="px-sm py-[4px] bg-surface border border-outline-variant rounded-DEFAULT text-on-surface font-label-md text-label-md hover:bg-surface-container-highest transition-colors focus:ring-2 focus:ring-primary/20 outline-none opacity-0 group-hover:opacity-100">
+                                    Open
+                                </button>
+</td>
+</tr>
+<!-- ROW 3 (Realistic filler) -->
+<tr class="hover:bg-surface-container-low transition-colors duration-150 group">
+<td class="px-md py-sm font-label-md text-label-md text-primary font-medium cursor-pointer">EC_102</td>
+<td class="px-md py-sm font-body-sm text-body-sm text-on-surface-variant">ORD-88331-C</td>
+<td class="px-md py-sm">
+<div class="truncate max-w-[200px] text-on-surface" title="Customer requested cancellation before shipment but seller shipped anyway.">
+                                    Customer requested cancellation...
+                                </div>
+</td>
+<td class="px-md py-sm">
+<span class="inline-flex items-center px-[6px] py-[2px] rounded-full bg-secondary-container/30 text-on-surface-variant font-label-xs text-label-xs border border-outline-variant/30">
+                                    unwanted_item
+                                </span>
+</td>
+<td class="px-md py-sm">
+<span class="inline-flex items-center gap-[4px] px-[8px] py-[2px] rounded-full bg-surface-variant text-secondary font-label-xs text-label-xs font-bold">
+<span class="w-[6px] h-[6px] rounded-full bg-secondary"></span>
+                                    no_action
+                                </span>
+</td>
+<td class="px-md py-sm text-right font-label-md text-label-md text-on-surface-variant">0.00 BRL</td>
+<td class="px-md py-sm">
+<div class="flex items-center gap-sm">
+<span class="font-label-xs text-label-xs text-on-surface-variant w-8">0.99</span>
+<!-- Segmented Confidence Bar: very high -->
+<div class="flex h-[6px] w-16 gap-[1px] bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full w-full bg-primary opacity-20"></div>
+<div class="h-full w-full bg-primary opacity-40"></div>
+<div class="h-full w-full bg-primary opacity-60"></div>
+<div class="h-full w-full bg-primary opacity-80"></div>
+<div class="h-full w-full bg-primary border-[1px] border-surface-container-lowest"></div>
+</div>
+</div>
+</td>
+<td class="px-md py-sm text-on-surface-variant text-[12px]">3hrs ago</td>
+<td class="px-md py-sm text-right">
+<button class="px-sm py-[4px] bg-surface border border-outline-variant rounded-DEFAULT text-on-surface font-label-md text-label-md hover:bg-surface-container-highest transition-colors focus:ring-2 focus:ring-primary/20 outline-none opacity-0 group-hover:opacity-100">
+                                    Open
+                                </button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination (Implied, standard table footer) -->
+<div class="flex items-center justify-between py-sm px-xs mt-sm">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Showing 1 to 3 of 456 cases</span>
+<div class="flex items-center gap-xs">
+<button class="w-8 h-8 flex items-center justify-center rounded-DEFAULT border border-outline-variant text-on-surface-variant hover:bg-surface-container-highest disabled:opacity-50" disabled="">
+<span class="material-symbols-outlined text-[18px]">chevron_left</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-DEFAULT bg-primary-container text-on-primary-container font-label-md text-label-md">1</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-DEFAULT border border-outline-variant hover:bg-surface-container-highest font-label-md text-label-md text-on-surface">2</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-DEFAULT border border-outline-variant hover:bg-surface-container-highest font-label-md text-label-md text-on-surface">3</button>
+<span class="text-on-surface-variant px-xs">...</span>
+<button class="w-8 h-8 flex items-center justify-center rounded-DEFAULT border border-outline-variant text-on-surface hover:bg-surface-container-highest">
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</div>
+</div>
+</main>
+</div>
+</body></html>

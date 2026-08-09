@@ -1,0 +1,63 @@
+# Secrets and machine-local configuration
+.env
+.env.*
+!.env.example
+.secrets/
+secrets/
+*.pem
+*.key
+*.p12
+*.pfx
+*credentials*.json
+service-account*.json
+
+# Python environments, caches, and build artifacts
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.tox/
+.nox/
+.venv/
+venv/
+dist/
+build/
+
+# Test and coverage artifacts
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+
+# Private case data and generated runtime artifacts
+/input/*
+!/input/.gitkeep
+/output/*
+!/output/.gitkeep
+/trace.jsonl
+/metadata.json
+/output*.zip
+*.log
+*.tmp
+
+# Local databases
+*.db
+*.sqlite
+*.sqlite3
+
+# Editors and operating systems
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Frontend local artifacts
+/frontend/node_modules/
+/frontend/dist/
+/frontend/*.tsbuildinfo
+/api-server*.log
+/frontend/vite-*.log
+/frontend/vite-cmd.log

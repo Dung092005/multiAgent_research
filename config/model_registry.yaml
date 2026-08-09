@@ -1,0 +1,8 @@
+provider: OpenRouter
+model_id: openai/gpt-5-nano
+parameter_count_b: null
+model_family: GPT-5 Nano
+verified_source: https://openrouter.ai/openai/gpt-5-nano
+provider_page: https://openrouter.ai/openai/gpt-5-nano
+verified_at: "2026-08-09"
+notes: Personal project model; no lab parameter-size cap.
