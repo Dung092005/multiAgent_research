@@ -3,6 +3,7 @@
 from time import perf_counter
 
 from experiments.pvoc_v0.observations import observation_fingerprint
+from experiments.pvoc_v0.research_llm import ResearchStructuredLLM
 from experiments.pvoc_v0.schemas import (
     CandidateMessage,
     DecisionExecution,
@@ -10,7 +11,6 @@ from experiments.pvoc_v0.schemas import (
     PrivateObservation,
     PVoCAgentName,
 )
-from src.agents.base import StructuredLLM
 
 DECISION_SYSTEM_PROMPT = """You are a research-only recipient in a controlled e-commerce experiment.
 Use only the supplied private observation and optional received message. Do not infer missing
@@ -30,7 +30,7 @@ closing JSON brace."""
 class PrivateDecisionAgent:
     """Calls the existing structured LLM client without touching production agent classes."""
 
-    def __init__(self, name: PVoCAgentName, llm: StructuredLLM) -> None:
+    def __init__(self, name: PVoCAgentName, llm: ResearchStructuredLLM) -> None:
         self.name = name
         self._llm = llm
 

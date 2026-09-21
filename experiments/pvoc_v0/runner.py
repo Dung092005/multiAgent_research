@@ -19,13 +19,13 @@ from src.config.model_config import validate_model_configuration
 from src.config.settings import get_settings
 from src.database.connection import create_engine, create_session_factory
 from src.database.repository import OlistRepository
-from src.llm.openrouter_client import OpenRouterClient
 from src.policy.engine import PolicyEngine
 
 from .agents import PrivateDecisionAgent
 from .counterfactual import CounterfactualRunner
 from .messages import AGENTS, build_candidate_message, directed_pairs
 from .observations import PrivateObservationBuilder
+from .research_llm import ResearchVertexStructuredLLM
 from .schemas import CounterfactualRecord
 
 SUPPORTED_CASE_IDS = tuple(f"EC_{number:03d}" for number in range(1, 36))
@@ -95,7 +95,7 @@ async def run_study(args: argparse.Namespace) -> tuple[Path, Path]:
     try:
         repository = OlistRepository(create_session_factory(engine))
         observation_builder = PrivateObservationBuilder(repository)
-        llm = OpenRouterClient(settings)
+        llm = ResearchVertexStructuredLLM(settings)
         agents = {agent_name: PrivateDecisionAgent(agent_name, llm) for agent_name in AGENTS}
         policy_engine = PolicyEngine()
         counterfactual_runner = CounterfactualRunner(lambda_cost=args.lambda_cost)
