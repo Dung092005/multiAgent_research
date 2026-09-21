@@ -1,0 +1,10 @@
+{
+  "case_id": "EC_001",
+  "opened_at": "2018-01-20T00:00:00-03:00",
+  "customer_request": {
+    "language": "vi",
+    "message": "Đơn hàng 00d0ffd14774da775ac832ba8520510f đã bị hủy nhưng tôi đã thanh toán. Hãy kiểm tra khoản hoàn tiền phù hợp.",
+    "claimed_order_id": "00d0ffd14774da775ac832ba8520510f"
+  },
+  "policy_version": "EC_POLICY_V1"
+}

@@ -1,0 +1,10 @@
+{
+  "case_id": "EC_008",
+  "opened_at": "2018-02-23T00:00:00-03:00",
+  "customer_request": {
+    "language": "vi",
+    "message": "Tôi cần hỗ trợ về khoản thanh toán của đơn 0166cc8756d58b4a30fb49de83527120 sau khi đơn bị hủy.",
+    "claimed_order_id": "0166cc8756d58b4a30fb49de83527120"
+  },
+  "policy_version": "EC_POLICY_V1"
+}

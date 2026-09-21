@@ -1,0 +1,10 @@
+{
+  "case_id": "EC_013",
+  "opened_at": "2018-01-09T00:00:00-03:00",
+  "customer_request": {
+    "language": "vi",
+    "message": "Đơn 00a500bc03bc4ec968e574c2553bed4b báo không khả dụng dù tôi đã thanh toán. Vui lòng kiểm tra quyền lợi của tôi.",
+    "claimed_order_id": "00a500bc03bc4ec968e574c2553bed4b"
+  },
+  "policy_version": "EC_POLICY_V1"
+}

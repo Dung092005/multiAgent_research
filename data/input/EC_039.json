@@ -1,0 +1,10 @@
+{
+  "case_id": "EC_039",
+  "opened_at": "2018-04-17T00:00:00-03:00",
+  "customer_request": {
+    "language": "vi",
+    "message": "Đơn 002f19a65a2ddd70a090297872e6d64e hiển thị nhiều khoản thanh toán. Hãy kiểm tra giúp tôi có bị tính trùng không.",
+    "claimed_order_id": "002f19a65a2ddd70a090297872e6d64e"
+  },
+  "policy_version": "EC_POLICY_V1"
+}

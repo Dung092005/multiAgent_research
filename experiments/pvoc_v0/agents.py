@@ -14,8 +14,17 @@ from src.agents.base import StructuredLLM
 
 DECISION_SYSTEM_PROMPT = """You are a research-only recipient in a controlled e-commerce experiment.
 Use only the supplied private observation and optional received message. Do not infer missing
-facts, calculate refunds, use external knowledge, or reveal chain-of-thought. Choose exactly one
-EC_POLICY_V1 primary-issue code and give a concise evidence-grounded reason. Return JSON only."""
+facts, calculate refunds, use external knowledge, or reveal chain-of-thought.
+
+Return exactly one JSON object with exactly these keys:
+{"predicted_root_cause":"<one allowed code>","confidence":<number from 0 to 1>,"short_reason":"<concise evidence-grounded reason>"}
+
+The only allowed predicted_root_cause values are: canceled_order_paid,
+unavailable_order_paid, late_delivery_seller, late_delivery_logistics,
+valid_split_payment, unsupported_late_claim. Never use keys named primary_issue or reason,
+and never use any ORDER_* code. short_reason must be an evidence-grounded plain-text phrase of
+three to six words, with no quotation marks, newlines, or braces. End immediately after the
+closing JSON brace."""
 
 
 class PrivateDecisionAgent:

@@ -1,0 +1,10 @@
+{
+  "case_id": "EC_019",
+  "opened_at": "2018-08-24T03:24:50-03:00",
+  "customer_request": {
+    "language": "vi",
+    "message": "Đơn 1b0bc119ea5ac37e73e2275afc7904ee được giao trễ. Hãy kiểm tra nguyên nhân và bên chịu trách nhiệm.",
+    "claimed_order_id": "1b0bc119ea5ac37e73e2275afc7904ee"
+  },
+  "policy_version": "EC_POLICY_V1"
+}

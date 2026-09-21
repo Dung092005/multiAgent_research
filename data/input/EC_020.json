@@ -1,0 +1,10 @@
+{
+  "case_id": "EC_020",
+  "opened_at": "2017-06-09T05:47:38-03:00",
+  "customer_request": {
+    "language": "vi",
+    "message": "Tôi nhận đơn 0e3ec3c17b64c6cc7bc01bba21e7afdf sau ngày dự kiến và muốn được xem xét quyền lợi.",
+    "claimed_order_id": "0e3ec3c17b64c6cc7bc01bba21e7afdf"
+  },
+  "policy_version": "EC_POLICY_V1"
+}

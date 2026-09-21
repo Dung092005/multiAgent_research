@@ -1,0 +1,10 @@
+{
+  "case_id": "EC_048",
+  "opened_at": "2018-08-21T00:00:00-03:00",
+  "customer_request": {
+    "language": "vi",
+    "message": "Vui lòng kiểm tra khiếu nại giao trễ đối với đơn 00024acbcdf0a6daa1e931b038114c75.",
+    "claimed_order_id": "00024acbcdf0a6daa1e931b038114c75"
+  },
+  "policy_version": "EC_POLICY_V1"
+}

@@ -1,0 +1,10 @@
+{
+  "case_id": "EC_031",
+  "opened_at": "2017-12-10T17:27:23-03:00",
+  "customer_request": {
+    "language": "vi",
+    "message": "Đơn 000e906b789b55f64edcb1f84030f90d đến muộn hơn cam kết. Vui lòng điều tra quá trình giao hàng.",
+    "claimed_order_id": "000e906b789b55f64edcb1f84030f90d"
+  },
+  "policy_version": "EC_POLICY_V1"
+}

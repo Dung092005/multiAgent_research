@@ -1,0 +1,10 @@
+{
+  "case_id": "EC_034",
+  "opened_at": "2018-05-04T20:29:24-03:00",
+  "customer_request": {
+    "language": "vi",
+    "message": "Hãy xác minh nguyên nhân giao trễ của đơn 00324b3eda39ba5ecce3945823e3594c và khoản hỗ trợ phù hợp.",
+    "claimed_order_id": "00324b3eda39ba5ecce3945823e3594c"
+  },
+  "policy_version": "EC_POLICY_V1"
+}

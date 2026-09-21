@@ -1,0 +1,10 @@
+{
+  "case_id": "EC_010",
+  "opened_at": "2016-12-08T00:00:00-03:00",
+  "customer_request": {
+    "language": "vi",
+    "message": "Hãy kiểm tra khoản tiền đã trả cho đơn không khả dụng 1a47da1d66c70489c8e35fe2b5433ab7.",
+    "claimed_order_id": "1a47da1d66c70489c8e35fe2b5433ab7"
+  },
+  "policy_version": "EC_POLICY_V1"
+}

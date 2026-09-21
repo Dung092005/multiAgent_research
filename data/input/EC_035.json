@@ -1,0 +1,10 @@
+{
+  "case_id": "EC_035",
+  "opened_at": "2018-07-18T00:00:00-03:00",
+  "customer_request": {
+    "language": "vi",
+    "message": "Đơn 03ecec245220b63fd7f68c1737ba99ba hiển thị nhiều khoản thanh toán. Hãy kiểm tra giúp tôi có bị tính trùng không.",
+    "claimed_order_id": "03ecec245220b63fd7f68c1737ba99ba"
+  },
+  "policy_version": "EC_POLICY_V1"
+}

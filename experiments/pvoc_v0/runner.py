@@ -9,6 +9,7 @@ from __future__ import annotations
 import argparse
 import asyncio
 import json
+import sys
 from datetime import UTC, datetime
 from pathlib import Path
 from uuid import uuid4
@@ -16,7 +17,7 @@ from uuid import uuid4
 from scripts.validate_inputs import load_and_validate_inputs
 from src.config.model_config import validate_model_configuration
 from src.config.settings import get_settings
-from src.database.connection import create_engine
+from src.database.connection import create_engine, create_session_factory
 from src.database.repository import OlistRepository
 from src.llm.openrouter_client import OpenRouterClient
 from src.policy.engine import PolicyEngine
@@ -87,12 +88,12 @@ def write_results(
 async def run_study(args: argparse.Namespace) -> tuple[Path, Path]:
     """Run all directed messages for the requested PVoC v0 cases."""
     settings = get_settings()
-    validate_model_configuration(settings)
+    validate_model_configuration()
     cases = load_supported_cases(args.input_dir, args.case_id)
 
     engine = create_engine(settings, read_only=True)
     try:
-        repository = OlistRepository(engine)
+        repository = OlistRepository(create_session_factory(engine))
         observation_builder = PrivateObservationBuilder(repository)
         llm = OpenRouterClient(settings)
         agents = {agent_name: PrivateDecisionAgent(agent_name, llm) for agent_name in AGENTS}
@@ -103,7 +104,7 @@ async def run_study(args: argparse.Namespace) -> tuple[Path, Path]:
         for case in cases:
             observations = await observation_builder.build(case)
             oracle_decision = policy_engine.evaluate(
-                await repository.get_policy_context(case.order_id)
+                await repository.get_policy_context(case.customer_request.claimed_order_id)
             )
             oracle_action = oracle_decision.primary_issue
 
@@ -136,7 +137,7 @@ async def run_study(args: argparse.Namespace) -> tuple[Path, Path]:
             case_ids=[case.case_id for case in cases],
         )
     finally:
-        engine.dispose()
+        await engine.dispose()
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -174,7 +175,12 @@ def main() -> None:
     if args.lambda_cost < 0:
         raise SystemExit("--lambda-cost must be non-negative.")
 
-    records_path, manifest_path = asyncio.run(run_study(args))
+    if sys.platform == "win32":
+        records_path, manifest_path = asyncio.run(
+            run_study(args), loop_factory=asyncio.SelectorEventLoop
+        )
+    else:
+        records_path, manifest_path = asyncio.run(run_study(args))
     print(f"Wrote PVoC v0 records: {records_path}")
     print(f"Wrote PVoC v0 manifest: {manifest_path}")
 

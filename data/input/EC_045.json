@@ -1,0 +1,10 @@
+{
+  "case_id": "EC_045",
+  "opened_at": "2017-09-30T00:00:00-03:00",
+  "customer_request": {
+    "language": "vi",
+    "message": "Tôi cho rằng đơn 00010242fe8c5a6d1ba2dd792cb16214 giao trễ. Hãy đối chiếu mốc giao hàng thực tế.",
+    "claimed_order_id": "00010242fe8c5a6d1ba2dd792cb16214"
+  },
+  "policy_version": "EC_POLICY_V1"
+}

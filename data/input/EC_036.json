@@ -1,0 +1,10 @@
+{
+  "case_id": "EC_036",
+  "opened_at": "2018-07-25T00:00:00-03:00",
+  "customer_request": {
+    "language": "vi",
+    "message": "Tôi thấy thanh toán của đơn 03f51c9adce893f63936c5146701aa2f được tách thành nhiều dòng và cần được giải thích.",
+    "claimed_order_id": "03f51c9adce893f63936c5146701aa2f"
+  },
+  "policy_version": "EC_POLICY_V1"
+}
