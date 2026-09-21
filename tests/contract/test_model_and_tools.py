@@ -41,17 +41,24 @@ class FakeClient:
 
 
 def settings_with_key():
-    return replace(get_settings(), openrouter_api_key="test-key", llm_max_retries=2)
+    return replace(
+        get_settings(),
+        llm_provider="openrouter",
+        openrouter_api_key="test-key",
+        llm_max_retries=2,
+    )
 
 
 def test_model_registry_matches_source():
     validate_model_configuration()
-    assert OPENROUTER_MODEL_ID == "openai/gpt-5-nano"
+    assert OPENROUTER_MODEL_ID == "google/gemini-2.5-flash"
 
 
 def test_missing_api_key_fails_fast():
     with pytest.raises(ConfigurationError):
-        OpenRouterClient(replace(get_settings(), openrouter_api_key=""))
+        OpenRouterClient(
+            replace(get_settings(), llm_provider="openrouter", openrouter_api_key="")
+        )
 
 
 def test_agent_tool_allowlists_have_no_arbitrary_sql():

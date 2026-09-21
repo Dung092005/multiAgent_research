@@ -152,22 +152,33 @@ def ensure_reader_role(cursor: psycopg.Cursor, role: str, password: str) -> None
         )
 
 
+def sync_dsn(settings) -> str:
+    """Prefer direct (non-pooled) Neon URL for COPY / schema work."""
+    for candidate in (settings.database_url_unpooled, settings.database_url):
+        value = candidate.strip().strip('"').strip("'")
+        if value:
+            return value
+    return (
+        f"host={settings.postgres_host} port={settings.postgres_port} "
+        f"dbname={settings.postgres_db} user={settings.postgres_user} "
+        f"password={settings.postgres_password} sslmode=require"
+    )
+
+
 def import_data(data_dir: Path) -> dict[str, int]:
     settings = get_settings()
     paths = {table.table: data_dir / table.filename for table in TABLES}
     for table in TABLES:
         validate_csv(paths[table.table], table)
 
-    connection_string = (
-        f"host={settings.postgres_host} port={settings.postgres_port} "
-        f"dbname={settings.postgres_db} user={settings.postgres_user} "
-        f"password={settings.postgres_password}"
-    )
     schema_path = Path(__file__).resolve().parents[1] / "src" / "database" / "schema.sql"
     counts: dict[str, int] = {}
-    with psycopg.connect(connection_string) as connection:  # noqa: SIM117
+    with psycopg.connect(sync_dsn(settings)) as connection:  # noqa: SIM117
         with connection.cursor() as cursor:
-            ensure_reader_role(cursor, settings.postgres_read_user, settings.postgres_read_password)
+            if settings.postgres_read_user != settings.postgres_user:
+                ensure_reader_role(
+                    cursor, settings.postgres_read_user, settings.postgres_read_password
+                )
             cursor.execute(schema_path.read_text(encoding="utf-8"))
             table_names = sql.SQL(", ").join(
                 sql.Identifier("olist", table.table) for table in reversed(TABLES)
@@ -175,6 +186,7 @@ def import_data(data_dir: Path) -> dict[str, int]:
             cursor.execute(sql.SQL("TRUNCATE {} RESTART IDENTITY").format(table_names))
 
             for table in TABLES:
+                print(f"importing {table.table}...", flush=True)
                 copy_statement = sql.SQL(
                     "COPY {} ({}) FROM STDIN WITH (FORMAT CSV, HEADER TRUE, ENCODING 'UTF8')"
                 ).format(
@@ -195,6 +207,7 @@ def import_data(data_dir: Path) -> dict[str, int]:
                         f"expected {table.expected_rows}, received {count}"
                     )
                 counts[table.table] = count
+                print(f"{table.table}: {count}", flush=True)
 
             orphan_checks = {
                 "orders_without_customer": "SELECT COUNT(*) FROM olist.orders o LEFT JOIN olist.customers c ON c.customer_id=o.customer_id WHERE c.customer_id IS NULL",
@@ -206,16 +219,17 @@ def import_data(data_dir: Path) -> dict[str, int]:
                 if int(cursor.fetchone()[0]) != 0:
                     raise ValueError(f"Join integrity check failed: {name}")
 
-            cursor.execute(
-                sql.SQL("GRANT USAGE ON SCHEMA olist TO {}").format(
-                    sql.Identifier(settings.postgres_read_user)
+            if settings.postgres_read_user != settings.postgres_user:
+                cursor.execute(
+                    sql.SQL("GRANT USAGE ON SCHEMA olist TO {}").format(
+                        sql.Identifier(settings.postgres_read_user)
+                    )
                 )
-            )
-            cursor.execute(
-                sql.SQL("GRANT SELECT ON ALL TABLES IN SCHEMA olist TO {}").format(
-                    sql.Identifier(settings.postgres_read_user)
+                cursor.execute(
+                    sql.SQL("GRANT SELECT ON ALL TABLES IN SCHEMA olist TO {}").format(
+                        sql.Identifier(settings.postgres_read_user)
+                    )
                 )
-            )
     return counts
 
 

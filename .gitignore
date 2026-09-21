@@ -61,3 +61,5 @@ Desktop.ini
 /api-server*.log
 /frontend/vite-*.log
 /frontend/vite-cmd.log
+.neon
+node_modules/

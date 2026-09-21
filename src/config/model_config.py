@@ -6,10 +6,11 @@ import yaml
 
 from src.errors import ConfigurationError
 
-OPENROUTER_MODEL_ID = "openai/gpt-5-nano"
-OPENROUTER_MODEL_PARAMETER_COUNT_B: float | None = None  # proprietary; size not published
-OPENROUTER_PROVIDER = "OpenRouter"
-OPENROUTER_MODEL_FAMILY = "GPT-5 Nano"
+# Vertex AI OpenAI-compatible model id (google/<model>)
+OPENROUTER_MODEL_ID = "google/gemini-2.5-flash"
+OPENROUTER_MODEL_PARAMETER_COUNT_B: float | None = None
+OPENROUTER_PROVIDER = "Vertex AI"
+OPENROUTER_MODEL_FAMILY = "Gemini 2.5 Flash"
 LLM_TEMPERATURE = 0.1
 LLM_MAX_TOKENS = 1024
 

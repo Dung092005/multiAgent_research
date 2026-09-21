@@ -1,4 +1,4 @@
-"""Bounded OpenRouter calls with transient retry and one JSON repair."""
+"""Bounded LLM calls (Vertex / OpenRouter / Google AI) with retry and JSON repair."""
 
 from __future__ import annotations
 
@@ -29,6 +29,7 @@ COMPACT_JSON_INSTRUCTION = (
     "Return compact JSON only that matches the required schema. "
     "No markdown fences. Keep every string field under 200 characters."
 )
+_CLOUD_PLATFORM_SCOPE = ("https://www.googleapis.com/auth/cloud-platform",)
 
 
 @dataclass(frozen=True)
@@ -55,7 +56,57 @@ def is_transient_error(exc: BaseException) -> bool:
     return isinstance(exc, APIStatusError) and exc.status_code >= 500
 
 
+def _refresh_vertex_access_token() -> str:
+    try:
+        import google.auth
+        import google.auth.transport.requests
+    except ImportError as exc:  # pragma: no cover - dependency declared in pyproject
+        raise LLMRequestError(
+            "google-auth is required for Vertex AI. Install project dependencies."
+        ) from exc
+
+    credentials, _ = google.auth.default(scopes=_CLOUD_PLATFORM_SCOPE)
+    credentials.refresh(google.auth.transport.requests.Request())
+    token = getattr(credentials, "token", None)
+    if not token:
+        raise LLMRequestError("Unable to refresh Google Cloud access token for Vertex AI")
+    return str(token)
+
+
+async def _vertex_access_token() -> str:
+    return await asyncio.to_thread(_refresh_vertex_access_token)
+
+
+def _build_openai_client(settings: Settings) -> AsyncOpenAI:
+    provider = settings.llm_provider.strip().lower() or "vertex"
+    timeout = settings.llm_request_timeout_seconds
+
+    if provider == "vertex":
+        return AsyncOpenAI(
+            api_key=_vertex_access_token,
+            base_url=settings.vertex_openai_base_url,
+            timeout=timeout,
+        )
+    if provider == "google_ai":
+        return AsyncOpenAI(
+            api_key=settings.google_api_key,
+            base_url="https://generativelanguage.googleapis.com/v1beta/openai/",
+            timeout=timeout,
+        )
+    return AsyncOpenAI(
+        api_key=settings.openrouter_api_key,
+        base_url=settings.openrouter_base_url,
+        timeout=timeout,
+        default_headers={
+            "HTTP-Referer": "https://localhost/olist-multi-agent-disputes",
+            "X-Title": "Olist Dispute Desk",
+        },
+    )
+
+
 class OpenRouterClient:
+    """OpenAI-compatible structured client (Vertex by default)."""
+
     def __init__(
         self,
         settings: Settings,
@@ -65,15 +116,7 @@ class OpenRouterClient:
     ) -> None:
         settings.require_api_key()
         self._settings = settings
-        self._client = client or AsyncOpenAI(
-            api_key=settings.openrouter_api_key,
-            base_url=settings.openrouter_base_url,
-            timeout=settings.llm_request_timeout_seconds,
-            default_headers={
-                "HTTP-Referer": "https://localhost/olist-multi-agent-disputes",
-                "X-Title": "Olist Dispute Desk",
-            },
-        )
+        self._client = client or _build_openai_client(settings)
         self._semaphore = semaphore or asyncio.Semaphore(settings.max_concurrent_llm_calls)
 
     async def structured(
@@ -157,7 +200,7 @@ class OpenRouterClient:
         except LLMStructuredOutputError:
             raise
         except TimeoutError as exc:
-            raise LLMRequestError("OpenRouter request timed out") from exc
+            raise LLMRequestError("LLM request timed out") from exc
         except Exception as exc:
-            raise LLMRequestError(f"OpenRouter request failed: {type(exc).__name__}") from exc
-        raise LLMRequestError("OpenRouter request ended without a response")
+            raise LLMRequestError(f"LLM request failed: {type(exc).__name__}: {exc}") from exc
+        raise LLMRequestError("LLM request ended without a response")
