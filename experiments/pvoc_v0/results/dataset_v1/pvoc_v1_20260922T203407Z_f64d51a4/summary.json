@@ -1,0 +1,129 @@
+{
+  "experiment": "pvoc_counterfactual_dataset_v1",
+  "overall": {
+    "message_sample_count": 12,
+    "positive_count": 3,
+    "zero_count": 9,
+    "negative_count": 0,
+    "mean_delta_utility": 0.23333333333333334,
+    "mean_repeated_mean_value": 0.22183333333333333
+  },
+  "by_root_cause": [
+    {
+      "root_cause": "canceled_order_paid",
+      "sample_count": 6,
+      "positive": 1,
+      "zero": 5,
+      "negative": 0,
+      "mean_delta": 0.16666666666666666
+    },
+    {
+      "root_cause": "unavailable_order_paid",
+      "sample_count": 6,
+      "positive": 2,
+      "zero": 4,
+      "negative": 0,
+      "mean_delta": 0.3
+    }
+  ],
+  "by_communication_edge": [
+    {
+      "sender": "order_seller_agent",
+      "recipient": "payment_agent",
+      "sample_count": 2,
+      "positive": 2,
+      "zero": 0,
+      "negative": 0,
+      "mean_delta": 1.0
+    },
+    {
+      "sender": "order_seller_agent",
+      "recipient": "delivery_agent",
+      "sample_count": 2,
+      "positive": 1,
+      "zero": 1,
+      "negative": 0,
+      "mean_delta": 0.4
+    },
+    {
+      "sender": "payment_agent",
+      "recipient": "order_seller_agent",
+      "sample_count": 2,
+      "positive": 0,
+      "zero": 2,
+      "negative": 0,
+      "mean_delta": 0.0
+    },
+    {
+      "sender": "payment_agent",
+      "recipient": "delivery_agent",
+      "sample_count": 2,
+      "positive": 0,
+      "zero": 2,
+      "negative": 0,
+      "mean_delta": 0.0
+    },
+    {
+      "sender": "delivery_agent",
+      "recipient": "order_seller_agent",
+      "sample_count": 2,
+      "positive": 0,
+      "zero": 2,
+      "negative": 0,
+      "mean_delta": 0.0
+    },
+    {
+      "sender": "delivery_agent",
+      "recipient": "payment_agent",
+      "sample_count": 2,
+      "positive": 0,
+      "zero": 2,
+      "negative": 0,
+      "mean_delta": 0.0
+    }
+  ],
+  "stability": {
+    "with_modal_share": {
+      "values": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        0.6,
+        1.0,
+        0.8,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "min": 0.6,
+      "mean": 0.95,
+      "median": 1.0
+    },
+    "without_modal_share": {
+      "values": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        0.8,
+        1.0,
+        0.8,
+        1.0,
+        0.8
+      ],
+      "min": 0.8,
+      "mean": 0.95,
+      "median": 1.0
+    }
+  },
+  "action_change": {
+    "modal_action_changed_count": 8,
+    "modal_action_changed_utility_not_improved_count": 5
+  }
+}

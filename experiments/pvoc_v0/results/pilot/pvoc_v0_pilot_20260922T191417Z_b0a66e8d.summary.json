@@ -1,0 +1,1641 @@
+{
+  "experiment": "pvoc_v0_stratified_pilot",
+  "pilot_case_ids": [
+    "EC_001",
+    "EC_010",
+    "EC_019",
+    "EC_027",
+    "EC_035",
+    "EC_043"
+  ],
+  "oracle_actions": {
+    "EC_001": "canceled_order_paid",
+    "EC_010": "unavailable_order_paid",
+    "EC_019": "late_delivery_seller",
+    "EC_027": "late_delivery_logistics",
+    "EC_035": "valid_split_payment",
+    "EC_043": "unsupported_late_claim"
+  },
+  "n_trials_per_condition": 5,
+  "directed_pairs_per_case": 6,
+  "expected_recipient_executions": 360,
+  "actual_recipient_executions": 360,
+  "sanity_checks": {
+    "all_six_oracle_classes_correct": true,
+    "fixed_candidate_messages": true,
+    "stable_observation_fingerprints": true,
+    "correct_pair_counts": true,
+    "oracle_hidden": true,
+    "private_observation_isolation": true
+  },
+  "per_case": [
+    {
+      "case_id": "EC_001",
+      "oracle": "canceled_order_paid",
+      "positive_pair_count": 2,
+      "zero_effect_pair_count": 4,
+      "negative_pair_count": 0,
+      "best_observed_delta": 1.0,
+      "worst_observed_delta": 0.0
+    },
+    {
+      "case_id": "EC_010",
+      "oracle": "unavailable_order_paid",
+      "positive_pair_count": 2,
+      "zero_effect_pair_count": 4,
+      "negative_pair_count": 0,
+      "best_observed_delta": 1.0,
+      "worst_observed_delta": 0.0
+    },
+    {
+      "case_id": "EC_019",
+      "oracle": "late_delivery_seller",
+      "positive_pair_count": 0,
+      "zero_effect_pair_count": 6,
+      "negative_pair_count": 0,
+      "best_observed_delta": 0.0,
+      "worst_observed_delta": 0.0
+    },
+    {
+      "case_id": "EC_027",
+      "oracle": "late_delivery_logistics",
+      "positive_pair_count": 1,
+      "zero_effect_pair_count": 5,
+      "negative_pair_count": 0,
+      "best_observed_delta": 0.2,
+      "worst_observed_delta": 0.0
+    },
+    {
+      "case_id": "EC_035",
+      "oracle": "valid_split_payment",
+      "positive_pair_count": 2,
+      "zero_effect_pair_count": 3,
+      "negative_pair_count": 1,
+      "best_observed_delta": 1.0,
+      "worst_observed_delta": -0.6
+    },
+    {
+      "case_id": "EC_043",
+      "oracle": "unsupported_late_claim",
+      "positive_pair_count": 3,
+      "zero_effect_pair_count": 2,
+      "negative_pair_count": 1,
+      "best_observed_delta": 1.0,
+      "worst_observed_delta": -0.8
+    }
+  ],
+  "pairs": [
+    {
+      "case_id": "EC_001",
+      "oracle": "canceled_order_paid",
+      "sender": "delivery_agent",
+      "recipient": "order_seller_agent",
+      "without_message": {
+        "action_counts": {
+          "canceled_order_paid": 5
+        },
+        "modal_action": "canceled_order_paid",
+        "modal_share": 1.0,
+        "oracle_accuracy_rate": 1.0,
+        "mean_confidence": 0.98,
+        "mean_prompt_tokens": 343,
+        "mean_completion_tokens": 35.4,
+        "mean_token_usage": 378.4,
+        "mean_latency_ms": 2962.0842000003904,
+        "mean_utility": 1.0
+      },
+      "with_message": {
+        "action_counts": {
+          "canceled_order_paid": 5
+        },
+        "modal_action": "canceled_order_paid",
+        "modal_share": 1.0,
+        "oracle_accuracy_rate": 1.0,
+        "mean_confidence": 1.0,
+        "mean_prompt_tokens": 439,
+        "mean_completion_tokens": 34.8,
+        "mean_token_usage": 473.8,
+        "mean_latency_ms": 2782.134700001916,
+        "mean_utility": 1.0
+      },
+      "communication_cost": 11.0,
+      "lambda_cost": 0.001,
+      "delta_mean_utility": 0.0,
+      "mean_observed_value": -0.011,
+      "effect": "NO OBSERVED UTILITY EFFECT",
+      "modal_action_changed_accuracy_unchanged": false
+    },
+    {
+      "case_id": "EC_001",
+      "oracle": "canceled_order_paid",
+      "sender": "delivery_agent",
+      "recipient": "payment_agent",
+      "without_message": {
+        "action_counts": {
+          "valid_split_payment": 4,
+          "unsupported_late_claim": 1
+        },
+        "modal_action": "valid_split_payment",
+        "modal_share": 0.8,
+        "oracle_accuracy_rate": 0.0,
+        "mean_confidence": 0.8,
+        "mean_prompt_tokens": 389,
+        "mean_completion_tokens": 35,
+        "mean_token_usage": 424,
+        "mean_latency_ms": 2679.510280000977,
+        "mean_utility": 0.0
+      },
+      "with_message": {
+        "action_counts": {
+          "late_delivery_logistics": 4,
+          "valid_split_payment": 1
+        },
+        "modal_action": "late_delivery_logistics",
+        "modal_share": 0.8,
+        "oracle_accuracy_rate": 0.0,
+        "mean_confidence": 0.64,
+        "mean_prompt_tokens": 483,
+        "mean_completion_tokens": 35.4,
+        "mean_token_usage": 518.4,
+        "mean_latency_ms": 3123.569659999339,
+        "mean_utility": 0.0
+      },
+      "communication_cost": 11.0,
+      "lambda_cost": 0.001,
+      "delta_mean_utility": 0.0,
+      "mean_observed_value": -0.011,
+      "effect": "NO OBSERVED UTILITY EFFECT",
+      "modal_action_changed_accuracy_unchanged": true
+    },
+    {
+      "case_id": "EC_001",
+      "oracle": "canceled_order_paid",
+      "sender": "order_seller_agent",
+      "recipient": "delivery_agent",
+      "without_message": {
+        "action_counts": {
+          "late_delivery_logistics": 5
+        },
+        "modal_action": "late_delivery_logistics",
+        "modal_share": 1.0,
+        "oracle_accuracy_rate": 0.0,
+        "mean_confidence": 0.8,
+        "mean_prompt_tokens": 354,
+        "mean_completion_tokens": 36,
+        "mean_token_usage": 390,
+        "mean_latency_ms": 2744.6775399992475,
+        "mean_utility": 0.0
+      },
+      "with_message": {
+        "action_counts": {
+          "canceled_order_paid": 5
+        },
+        "modal_action": "canceled_order_paid",
+        "modal_share": 1.0,
+        "oracle_accuracy_rate": 1.0,
+        "mean_confidence": 1.0,
+        "mean_prompt_tokens": 452,
+        "mean_completion_tokens": 36,
+        "mean_token_usage": 488,
+        "mean_latency_ms": 2426.704840004095,
+        "mean_utility": 1.0
+      },
+      "communication_cost": 12.0,
+      "lambda_cost": 0.001,
+      "delta_mean_utility": 1.0,
+      "mean_observed_value": 0.988,
+      "effect": "POSITIVE OBSERVED EFFECT",
+      "modal_action_changed_accuracy_unchanged": false
+    },
+    {
+      "case_id": "EC_001",
+      "oracle": "canceled_order_paid",
+      "sender": "order_seller_agent",
+      "recipient": "payment_agent",
+      "without_message": {
+        "action_counts": {
+          "valid_split_payment": 4,
+          "unsupported_late_claim": 1
+        },
+        "modal_action": "valid_split_payment",
+        "modal_share": 0.8,
+        "oracle_accuracy_rate": 0.0,
+        "mean_confidence": 0.72,
+        "mean_prompt_tokens": 389,
+        "mean_completion_tokens": 34.4,
+        "mean_token_usage": 423.4,
+        "mean_latency_ms": 2423.603820000426,
+        "mean_utility": 0.0
+      },
+      "with_message": {
+        "action_counts": {
+          "canceled_order_paid": 5
+        },
+        "modal_action": "canceled_order_paid",
+        "modal_share": 1.0,
+        "oracle_accuracy_rate": 1.0,
+        "mean_confidence": 1.0,
+        "mean_prompt_tokens": 487,
+        "mean_completion_tokens": 35.8,
+        "mean_token_usage": 522.8,
+        "mean_latency_ms": 2565.0792600004934,
+        "mean_utility": 1.0
+      },
+      "communication_cost": 12.0,
+      "lambda_cost": 0.001,
+      "delta_mean_utility": 1.0,
+      "mean_observed_value": 0.988,
+      "effect": "POSITIVE OBSERVED EFFECT",
+      "modal_action_changed_accuracy_unchanged": false
+    },
+    {
+      "case_id": "EC_001",
+      "oracle": "canceled_order_paid",
+      "sender": "payment_agent",
+      "recipient": "delivery_agent",
+      "without_message": {
+        "action_counts": {
+          "late_delivery_logistics": 5
+        },
+        "modal_action": "late_delivery_logistics",
+        "modal_share": 1.0,
+        "oracle_accuracy_rate": 0.0,
+        "mean_confidence": 0.8,
+        "mean_prompt_tokens": 354,
+        "mean_completion_tokens": 36,
+        "mean_token_usage": 390,
+        "mean_latency_ms": 2866.3161199976457,
+        "mean_utility": 0.0
+      },
+      "with_message": {
+        "action_counts": {
+          "unsupported_late_claim": 5
+        },
+        "modal_action": "unsupported_late_claim",
+        "modal_share": 1.0,
+        "oracle_accuracy_rate": 0.0,
+        "mean_confidence": 0.5,
+        "mean_prompt_tokens": 449,
+        "mean_completion_tokens": 34,
+        "mean_token_usage": 483,
+        "mean_latency_ms": 2567.979700001888,
+        "mean_utility": 0.0
+      },
+      "communication_cost": 11.0,
+      "lambda_cost": 0.001,
+      "delta_mean_utility": 0.0,
+      "mean_observed_value": -0.011,
+      "effect": "NO OBSERVED UTILITY EFFECT",
+      "modal_action_changed_accuracy_unchanged": true
+    },
+    {
+      "case_id": "EC_001",
+      "oracle": "canceled_order_paid",
+      "sender": "payment_agent",
+      "recipient": "order_seller_agent",
+      "without_message": {
+        "action_counts": {
+          "canceled_order_paid": 5
+        },
+        "modal_action": "canceled_order_paid",
+        "modal_share": 1.0,
+        "oracle_accuracy_rate": 1.0,
+        "mean_confidence": 1.0,
+        "mean_prompt_tokens": 343,
+        "mean_completion_tokens": 35.8,
+        "mean_token_usage": 378.8,
+        "mean_latency_ms": 2393.142880004598,
+        "mean_utility": 1.0
+      },
+      "with_message": {
+        "action_counts": {
+          "canceled_order_paid": 5
+        },
+        "modal_action": "canceled_order_paid",
+        "modal_share": 1.0,
+        "oracle_accuracy_rate": 1.0,
+        "mean_confidence": 0.8200000000000001,
+        "mean_prompt_tokens": 440,
+        "mean_completion_tokens": 34.8,
+        "mean_token_usage": 474.8,
+        "mean_latency_ms": 2440.1298399985535,
+        "mean_utility": 1.0
+      },
+      "communication_cost": 11.0,
+      "lambda_cost": 0.001,
+      "delta_mean_utility": 0.0,
+      "mean_observed_value": -0.011,
+      "effect": "NO OBSERVED UTILITY EFFECT",
+      "modal_action_changed_accuracy_unchanged": false
+    },
+    {
+      "case_id": "EC_010",
+      "oracle": "unavailable_order_paid",
+      "sender": "delivery_agent",
+      "recipient": "order_seller_agent",
+      "without_message": {
+        "action_counts": {
+          "unavailable_order_paid": 5
+        },
+        "modal_action": "unavailable_order_paid",
+        "modal_share": 1.0,
+        "oracle_accuracy_rate": 1.0,
+        "mean_confidence": 1.0,
+        "mean_prompt_tokens": 558,
+        "mean_completion_tokens": 33.2,
+        "mean_token_usage": 591.2,
+        "mean_latency_ms": 2739.816840001731,
+        "mean_utility": 1.0
+      },
+      "with_message": {
+        "action_counts": {
+          "unavailable_order_paid": 5
+        },
+        "modal_action": "unavailable_order_paid",
+        "modal_share": 1.0,
+        "oracle_accuracy_rate": 1.0,
+        "mean_confidence": 1.0,
+        "mean_prompt_tokens": 688,
+        "mean_completion_tokens": 33,
+        "mean_token_usage": 721,
+        "mean_latency_ms": 3004.631119998521,
+        "mean_utility": 1.0
+      },
+      "communication_cost": 11.0,
+      "lambda_cost": 0.001,
+      "delta_mean_utility": 0.0,
+      "mean_observed_value": -0.011,
+      "effect": "NO OBSERVED UTILITY EFFECT",
+      "modal_action_changed_accuracy_unchanged": false
+    },
+    {
+      "case_id": "EC_010",
+      "oracle": "unavailable_order_paid",
+      "sender": "delivery_agent",
+      "recipient": "payment_agent",
+      "without_message": {
+        "action_counts": {
+          "valid_split_payment": 5
+        },
+        "modal_action": "valid_split_payment",
+        "modal_share": 1.0,
+        "oracle_accuracy_rate": 0.0,
+        "mean_confidence": 0.78,
+        "mean_prompt_tokens": 393,
+        "mean_completion_tokens": 35,
+        "mean_token_usage": 428,
+        "mean_latency_ms": 2775.3955799969845,
+        "mean_utility": 0.0
+      },
+      "with_message": {
+        "action_counts": {
+          "unsupported_late_claim": 5
+        },
+        "modal_action": "unsupported_late_claim",
+        "modal_share": 1.0,
+        "oracle_accuracy_rate": 0.0,
+        "mean_confidence": 1.0,
+        "mean_prompt_tokens": 521,
+        "mean_completion_tokens": 34,
+        "mean_token_usage": 555,
+        "mean_latency_ms": 2728.5289399995236,
+        "mean_utility": 0.0
+      },
+      "communication_cost": 11.0,
+      "lambda_cost": 0.001,
+      "delta_mean_utility": 0.0,
+      "mean_observed_value": -0.011,
+      "effect": "NO OBSERVED UTILITY EFFECT",
+      "modal_action_changed_accuracy_unchanged": true
+    },
+    {
+      "case_id": "EC_010",
+      "oracle": "unavailable_order_paid",
+      "sender": "order_seller_agent",
+      "recipient": "delivery_agent",
+      "without_message": {
+        "action_counts": {
+          "unsupported_late_claim": 5
+        },
+        "modal_action": "unsupported_late_claim",
+        "modal_share": 1.0,
+        "oracle_accuracy_rate": 0.0,
+        "mean_confidence": 1.0,
+        "mean_prompt_tokens": 427,
+        "mean_completion_tokens": 32,
+        "mean_token_usage": 459,
+        "mean_latency_ms": 2784.4735599966953,
+        "mean_utility": 0.0
+      },
+      "with_message": {
+        "action_counts": {
+          "unavailable_order_paid": 5
+        },
+        "modal_action": "unavailable_order_paid",
+        "modal_share": 1.0,
+        "oracle_accuracy_rate": 1.0,
+        "mean_confidence": 1.0,
+        "mean_prompt_tokens": 589,
+        "mean_completion_tokens": 34,
+        "mean_token_usage": 623,
+        "mean_latency_ms": 2728.3921399968676,
+        "mean_utility": 1.0
+      },
+      "communication_cost": 12.0,
+      "lambda_cost": 0.001,
+      "delta_mean_utility": 1.0,
+      "mean_observed_value": 0.988,
+      "effect": "POSITIVE OBSERVED EFFECT",
+      "modal_action_changed_accuracy_unchanged": false
+    },
+    {
+      "case_id": "EC_010",
+      "oracle": "unavailable_order_paid",
+      "sender": "order_seller_agent",
+      "recipient": "payment_agent",
+      "without_message": {
+        "action_counts": {
+          "valid_split_payment": 5
+        },
+        "modal_action": "valid_split_payment",
+        "modal_share": 1.0,
+        "oracle_accuracy_rate": 0.0,
+        "mean_confidence": 0.8,
+        "mean_prompt_tokens": 393,
+        "mean_completion_tokens": 35,
+        "mean_token_usage": 428,
+        "mean_latency_ms": 3001.032460006536,
+        "mean_utility": 0.0
+      },
+      "with_message": {
+        "action_counts": {
+          "unavailable_order_paid": 5
+        },
+        "modal_action": "unavailable_order_paid",
+        "modal_share": 1.0,
+        "oracle_accuracy_rate": 1.0,
+        "mean_confidence": 1.0,
+        "mean_prompt_tokens": 555,
+        "mean_completion_tokens": 34,
+        "mean_token_usage": 589,
+        "mean_latency_ms": 2864.055039995583,
+        "mean_utility": 1.0
+      },
+      "communication_cost": 12.0,
+      "lambda_cost": 0.001,
+      "delta_mean_utility": 1.0,
+      "mean_observed_value": 0.988,
+      "effect": "POSITIVE OBSERVED EFFECT",
+      "modal_action_changed_accuracy_unchanged": false
+    },
+    {
+      "case_id": "EC_010",
+      "oracle": "unavailable_order_paid",
+      "sender": "payment_agent",
+      "recipient": "delivery_agent",
+      "without_message": {
+        "action_counts": {
+          "late_delivery_logistics": 1,
+          "unsupported_late_claim": 4
+        },
+        "modal_action": "unsupported_late_claim",
+        "modal_share": 0.8,
+        "oracle_accuracy_rate": 0.0,
+        "mean_confidence": 0.96,
+        "mean_prompt_tokens": 427,
+        "mean_completion_tokens": 32.4,
+        "mean_token_usage": 459.4,
+        "mean_latency_ms": 2848.5470800020266,
+        "mean_utility": 0.0
+      },
+      "with_message": {
+        "action_counts": {
+          "late_delivery_logistics": 5
+        },
+        "modal_action": "late_delivery_logistics",
+        "modal_share": 1.0,
+        "oracle_accuracy_rate": 0.0,
+        "mean_confidence": 0.72,
+        "mean_prompt_tokens": 524,
+        "mean_completion_tokens": 36,
+        "mean_token_usage": 560,
+        "mean_latency_ms": 2740.641019999748,
+        "mean_utility": 0.0
+      },
+      "communication_cost": 11.0,
+      "lambda_cost": 0.001,
+      "delta_mean_utility": 0.0,
+      "mean_observed_value": -0.011,
+      "effect": "NO OBSERVED UTILITY EFFECT",
+      "modal_action_changed_accuracy_unchanged": true
+    },
+    {
+      "case_id": "EC_010",
+      "oracle": "unavailable_order_paid",
+      "sender": "payment_agent",
+      "recipient": "order_seller_agent",
+      "without_message": {
+        "action_counts": {
+          "unavailable_order_paid": 5
+        },
+        "modal_action": "unavailable_order_paid",
+        "modal_share": 1.0,
+        "oracle_accuracy_rate": 1.0,
+        "mean_confidence": 1.0,
+        "mean_prompt_tokens": 558,
+        "mean_completion_tokens": 34,
+        "mean_token_usage": 592,
+        "mean_latency_ms": 3022.274480003398,
+        "mean_utility": 1.0
+      },
+      "with_message": {
+        "action_counts": {
+          "unavailable_order_paid": 5
+        },
+        "modal_action": "unavailable_order_paid",
+        "modal_share": 1.0,
+        "oracle_accuracy_rate": 1.0,
+        "mean_confidence": 0.88,
+        "mean_prompt_tokens": 657,
+        "mean_completion_tokens": 36,
+        "mean_token_usage": 693,
+        "mean_latency_ms": 3202.3068999988027,
+        "mean_utility": 1.0
+      },
+      "communication_cost": 11.0,
+      "lambda_cost": 0.001,
+      "delta_mean_utility": 0.0,
+      "mean_observed_value": -0.011,
+      "effect": "NO OBSERVED UTILITY EFFECT",
+      "modal_action_changed_accuracy_unchanged": false
+    },
+    {
+      "case_id": "EC_019",
+      "oracle": "late_delivery_seller",
+      "sender": "delivery_agent",
+      "recipient": "order_seller_agent",
+      "without_message": {
+        "action_counts": {
+          "valid_split_payment": 5
+        },
+        "modal_action": "valid_split_payment",
+        "modal_share": 1.0,
+        "oracle_accuracy_rate": 0.0,
+        "mean_confidence": 1.0,
+        "mean_prompt_tokens": 910,
+        "mean_completion_tokens": 34,
+        "mean_token_usage": 944,
+        "mean_latency_ms": 2771.919919998618,
+        "mean_utility": 0.0
+      },
+      "with_message": {
+        "action_counts": {
+          "valid_split_payment": 5
+        },
+        "modal_action": "valid_split_payment",
+        "modal_share": 1.0,
+        "oracle_accuracy_rate": 0.0,
+        "mean_confidence": 1.0,
+        "mean_prompt_tokens": 1104,
+        "mean_completion_tokens": 35.2,
+        "mean_token_usage": 1139.2,
+        "mean_latency_ms": 2806.628939998336,
+        "mean_utility": 0.0
+      },
+      "communication_cost": 14.0,
+      "lambda_cost": 0.001,
+      "delta_mean_utility": 0.0,
+      "mean_observed_value": -0.014,
+      "effect": "NO OBSERVED UTILITY EFFECT",
+      "modal_action_changed_accuracy_unchanged": false
+    },
+    {
+      "case_id": "EC_019",
+      "oracle": "late_delivery_seller",
+      "sender": "delivery_agent",
+      "recipient": "payment_agent",
+      "without_message": {
+        "action_counts": {
+          "valid_split_payment": 5
+        },
+        "modal_action": "valid_split_payment",
+        "modal_share": 1.0,
+        "oracle_accuracy_rate": 0.0,
+        "mean_confidence": 0.74,
+        "mean_prompt_tokens": 392,
+        "mean_completion_tokens": 34.2,
+        "mean_token_usage": 426.2,
+        "mean_latency_ms": 2873.9982600003714,
+        "mean_utility": 0.0
+      },
+      "with_message": {
+        "action_counts": {
+          "late_delivery_logistics": 1,
+          "unsupported_late_claim": 4
+        },
+        "modal_action": "unsupported_late_claim",
+        "modal_share": 0.8,
+        "oracle_accuracy_rate": 0.0,
+        "mean_confidence": 0.98,
+        "mean_prompt_tokens": 584,
+        "mean_completion_tokens": 34.8,
+        "mean_token_usage": 618.8,
+        "mean_latency_ms": 3002.662779999082,
+        "mean_utility": 0.0
+      },
+      "communication_cost": 14.0,
+      "lambda_cost": 0.001,
+      "delta_mean_utility": 0.0,
+      "mean_observed_value": -0.014,
+      "effect": "NO OBSERVED UTILITY EFFECT",
+      "modal_action_changed_accuracy_unchanged": true
+    },
+    {
+      "case_id": "EC_019",
+      "oracle": "late_delivery_seller",
+      "sender": "order_seller_agent",
+      "recipient": "delivery_agent",
+      "without_message": {
+        "action_counts": {
+          "late_delivery_logistics": 5
+        },
+        "modal_action": "late_delivery_logistics",
+        "modal_share": 1.0,
+        "oracle_accuracy_rate": 0.0,
+        "mean_confidence": 0.9,
+        "mean_prompt_tokens": 614,
+        "mean_completion_tokens": 36.2,
+        "mean_token_usage": 650.2,
+        "mean_latency_ms": 2332.6137600000948,
+        "mean_utility": 0.0
+      },
+      "with_message": {
+        "action_counts": {
+          "late_delivery_logistics": 5
+        },
+        "modal_action": "late_delivery_logistics",
+        "modal_share": 1.0,
+        "oracle_accuracy_rate": 0.0,
+        "mean_confidence": 0.86,
+        "mean_prompt_tokens": 875,
+        "mean_completion_tokens": 36,
+        "mean_token_usage": 911,
+        "mean_latency_ms": 2377.8137399989646,
+        "mean_utility": 0.0
+      },
+      "communication_cost": 15.0,
+      "lambda_cost": 0.001,
+      "delta_mean_utility": 0.0,
+      "mean_observed_value": -0.015,
+      "effect": "NO OBSERVED UTILITY EFFECT",
+      "modal_action_changed_accuracy_unchanged": false
+    },
+    {
+      "case_id": "EC_019",
+      "oracle": "late_delivery_seller",
+      "sender": "order_seller_agent",
+      "recipient": "payment_agent",
+      "without_message": {
+        "action_counts": {
+          "valid_split_payment": 5
+        },
+        "modal_action": "valid_split_payment",
+        "modal_share": 1.0,
+        "oracle_accuracy_rate": 0.0,
+        "mean_confidence": 0.8,
+        "mean_prompt_tokens": 392,
+        "mean_completion_tokens": 34,
+        "mean_token_usage": 426,
+        "mean_latency_ms": 2780.896080000093,
+        "mean_utility": 0.0
+      },
+      "with_message": {
+        "action_counts": {
+          "valid_split_payment": 5
+        },
+        "modal_action": "valid_split_payment",
+        "modal_share": 1.0,
+        "oracle_accuracy_rate": 0.0,
+        "mean_confidence": 1.0,
+        "mean_prompt_tokens": 653,
+        "mean_completion_tokens": 33,
+        "mean_token_usage": 686,
+        "mean_latency_ms": 2597.8081000008387,
+        "mean_utility": 0.0
+      },
+      "communication_cost": 15.0,
+      "lambda_cost": 0.001,
+      "delta_mean_utility": 0.0,
+      "mean_observed_value": -0.015,
+      "effect": "NO OBSERVED UTILITY EFFECT",
+      "modal_action_changed_accuracy_unchanged": false
+    },
+    {
+      "case_id": "EC_019",
+      "oracle": "late_delivery_seller",
+      "sender": "payment_agent",
+      "recipient": "delivery_agent",
+      "without_message": {
+        "action_counts": {
+          "late_delivery_logistics": 5
+        },
+        "modal_action": "late_delivery_logistics",
+        "modal_share": 1.0,
+        "oracle_accuracy_rate": 0.0,
+        "mean_confidence": 0.9,
+        "mean_prompt_tokens": 614,
+        "mean_completion_tokens": 35.6,
+        "mean_token_usage": 649.6,
+        "mean_latency_ms": 2660.899039998185,
+        "mean_utility": 0.0
+      },
+      "with_message": {
+        "action_counts": {
+          "late_delivery_logistics": 5
+        },
+        "modal_action": "late_delivery_logistics",
+        "modal_share": 1.0,
+        "oracle_accuracy_rate": 0.0,
+        "mean_confidence": 0.9,
+        "mean_prompt_tokens": 708,
+        "mean_completion_tokens": 34.8,
+        "mean_token_usage": 742.8,
+        "mean_latency_ms": 2875.9730600053445,
+        "mean_utility": 0.0
+      },
+      "communication_cost": 10.0,
+      "lambda_cost": 0.001,
+      "delta_mean_utility": 0.0,
+      "mean_observed_value": -0.01,
+      "effect": "NO OBSERVED UTILITY EFFECT",
+      "modal_action_changed_accuracy_unchanged": false
+    },
+    {
+      "case_id": "EC_019",
+      "oracle": "late_delivery_seller",
+      "sender": "payment_agent",
+      "recipient": "order_seller_agent",
+      "without_message": {
+        "action_counts": {
+          "valid_split_payment": 5
+        },
+        "modal_action": "valid_split_payment",
+        "modal_share": 1.0,
+        "oracle_accuracy_rate": 0.0,
+        "mean_confidence": 1.0,
+        "mean_prompt_tokens": 910,
+        "mean_completion_tokens": 33.8,
+        "mean_token_usage": 943.8,
+        "mean_latency_ms": 2597.0708999986527,
+        "mean_utility": 0.0
+      },
+      "with_message": {
+        "action_counts": {
+          "valid_split_payment": 5
+        },
+        "modal_action": "valid_split_payment",
+        "modal_share": 1.0,
+        "oracle_accuracy_rate": 0.0,
+        "mean_confidence": 0.8,
+        "mean_prompt_tokens": 1006,
+        "mean_completion_tokens": 35,
+        "mean_token_usage": 1041,
+        "mean_latency_ms": 2798.6188400012907,
+        "mean_utility": 0.0
+      },
+      "communication_cost": 10.0,
+      "lambda_cost": 0.001,
+      "delta_mean_utility": 0.0,
+      "mean_observed_value": -0.01,
+      "effect": "NO OBSERVED UTILITY EFFECT",
+      "modal_action_changed_accuracy_unchanged": false
+    },
+    {
+      "case_id": "EC_027",
+      "oracle": "late_delivery_logistics",
+      "sender": "delivery_agent",
+      "recipient": "order_seller_agent",
+      "without_message": {
+        "action_counts": {
+          "valid_split_payment": 4,
+          "unsupported_late_claim": 1
+        },
+        "modal_action": "valid_split_payment",
+        "modal_share": 0.8,
+        "oracle_accuracy_rate": 0.0,
+        "mean_confidence": 1.0,
+        "mean_prompt_tokens": 772,
+        "mean_completion_tokens": 35,
+        "mean_token_usage": 807,
+        "mean_latency_ms": 3438.9601800008677,
+        "mean_utility": 0.0
+      },
+      "with_message": {
+        "action_counts": {
+          "late_delivery_logistics": 1,
+          "valid_split_payment": 4
+        },
+        "modal_action": "valid_split_payment",
+        "modal_share": 0.8,
+        "oracle_accuracy_rate": 0.2,
+        "mean_confidence": 0.98,
+        "mean_prompt_tokens": 937,
+        "mean_completion_tokens": 37.2,
+        "mean_token_usage": 974.2,
+        "mean_latency_ms": 3400.366099999519,
+        "mean_utility": 0.2
+      },
+      "communication_cost": 14.0,
+      "lambda_cost": 0.001,
+      "delta_mean_utility": 0.2,
+      "mean_observed_value": 0.186,
+      "effect": "POSITIVE OBSERVED EFFECT",
+      "modal_action_changed_accuracy_unchanged": false
+    },
+    {
+      "case_id": "EC_027",
+      "oracle": "late_delivery_logistics",
+      "sender": "delivery_agent",
+      "recipient": "payment_agent",
+      "without_message": {
+        "action_counts": {
+          "valid_split_payment": 5
+        },
+        "modal_action": "valid_split_payment",
+        "modal_share": 1.0,
+        "oracle_accuracy_rate": 0.0,
+        "mean_confidence": 1.0,
+        "mean_prompt_tokens": 531,
+        "mean_completion_tokens": 35,
+        "mean_token_usage": 566,
+        "mean_latency_ms": 2785.1914999977453,
+        "mean_utility": 0.0
+      },
+      "with_message": {
+        "action_counts": {
+          "valid_split_payment": 5
+        },
+        "modal_action": "valid_split_payment",
+        "modal_share": 1.0,
+        "oracle_accuracy_rate": 0.0,
+        "mean_confidence": 0.98,
+        "mean_prompt_tokens": 694,
+        "mean_completion_tokens": 34.8,
+        "mean_token_usage": 728.8,
+        "mean_latency_ms": 2932.6292599987937,
+        "mean_utility": 0.0
+      },
+      "communication_cost": 14.0,
+      "lambda_cost": 0.001,
+      "delta_mean_utility": 0.0,
+      "mean_observed_value": -0.014,
+      "effect": "NO OBSERVED UTILITY EFFECT",
+      "modal_action_changed_accuracy_unchanged": false
+    },
+    {
+      "case_id": "EC_027",
+      "oracle": "late_delivery_logistics",
+      "sender": "order_seller_agent",
+      "recipient": "delivery_agent",
+      "without_message": {
+        "action_counts": {
+          "late_delivery_logistics": 5
+        },
+        "modal_action": "late_delivery_logistics",
+        "modal_share": 1.0,
+        "oracle_accuracy_rate": 1.0,
+        "mean_confidence": 0.9,
+        "mean_prompt_tokens": 542,
+        "mean_completion_tokens": 36.2,
+        "mean_token_usage": 578.2,
+        "mean_latency_ms": 3089.7075200016843,
+        "mean_utility": 1.0
+      },
+      "with_message": {
+        "action_counts": {
+          "late_delivery_logistics": 5
+        },
+        "modal_action": "late_delivery_logistics",
+        "modal_share": 1.0,
+        "oracle_accuracy_rate": 1.0,
+        "mean_confidence": 0.8200000000000001,
+        "mean_prompt_tokens": 775,
+        "mean_completion_tokens": 34.8,
+        "mean_token_usage": 809.8,
+        "mean_latency_ms": 3033.402460004436,
+        "mean_utility": 1.0
+      },
+      "communication_cost": 16.0,
+      "lambda_cost": 0.001,
+      "delta_mean_utility": 0.0,
+      "mean_observed_value": -0.016,
+      "effect": "NO OBSERVED UTILITY EFFECT",
+      "modal_action_changed_accuracy_unchanged": false
+    },
+    {
+      "case_id": "EC_027",
+      "oracle": "late_delivery_logistics",
+      "sender": "order_seller_agent",
+      "recipient": "payment_agent",
+      "without_message": {
+        "action_counts": {
+          "valid_split_payment": 5
+        },
+        "modal_action": "valid_split_payment",
+        "modal_share": 1.0,
+        "oracle_accuracy_rate": 0.0,
+        "mean_confidence": 1.0,
+        "mean_prompt_tokens": 531,
+        "mean_completion_tokens": 34.8,
+        "mean_token_usage": 565.8,
+        "mean_latency_ms": 2815.4753399983747,
+        "mean_utility": 0.0
+      },
+      "with_message": {
+        "action_counts": {
+          "valid_split_payment": 5
+        },
+        "modal_action": "valid_split_payment",
+        "modal_share": 1.0,
+        "oracle_accuracy_rate": 0.0,
+        "mean_confidence": 1.0,
+        "mean_prompt_tokens": 764,
+        "mean_completion_tokens": 34,
+        "mean_token_usage": 798,
+        "mean_latency_ms": 2815.3914599999553,
+        "mean_utility": 0.0
+      },
+      "communication_cost": 16.0,
+      "lambda_cost": 0.001,
+      "delta_mean_utility": 0.0,
+      "mean_observed_value": -0.016,
+      "effect": "NO OBSERVED UTILITY EFFECT",
+      "modal_action_changed_accuracy_unchanged": false
+    },
+    {
+      "case_id": "EC_027",
+      "oracle": "late_delivery_logistics",
+      "sender": "payment_agent",
+      "recipient": "delivery_agent",
+      "without_message": {
+        "action_counts": {
+          "late_delivery_logistics": 5
+        },
+        "modal_action": "late_delivery_logistics",
+        "modal_share": 1.0,
+        "oracle_accuracy_rate": 1.0,
+        "mean_confidence": 0.9,
+        "mean_prompt_tokens": 542,
+        "mean_completion_tokens": 36.6,
+        "mean_token_usage": 578.6,
+        "mean_latency_ms": 2603.1720000028145,
+        "mean_utility": 1.0
+      },
+      "with_message": {
+        "action_counts": {
+          "late_delivery_logistics": 5
+        },
+        "modal_action": "late_delivery_logistics",
+        "modal_share": 1.0,
+        "oracle_accuracy_rate": 1.0,
+        "mean_confidence": 0.8200000000000001,
+        "mean_prompt_tokens": 705,
+        "mean_completion_tokens": 35.2,
+        "mean_token_usage": 740.2,
+        "mean_latency_ms": 2620.8421399991494,
+        "mean_utility": 1.0
+      },
+      "communication_cost": 13.0,
+      "lambda_cost": 0.001,
+      "delta_mean_utility": 0.0,
+      "mean_observed_value": -0.013000000000000001,
+      "effect": "NO OBSERVED UTILITY EFFECT",
+      "modal_action_changed_accuracy_unchanged": false
+    },
+    {
+      "case_id": "EC_027",
+      "oracle": "late_delivery_logistics",
+      "sender": "payment_agent",
+      "recipient": "order_seller_agent",
+      "without_message": {
+        "action_counts": {
+          "valid_split_payment": 5
+        },
+        "modal_action": "valid_split_payment",
+        "modal_share": 1.0,
+        "oracle_accuracy_rate": 0.0,
+        "mean_confidence": 1.0,
+        "mean_prompt_tokens": 772,
+        "mean_completion_tokens": 34.2,
+        "mean_token_usage": 806.2,
+        "mean_latency_ms": 2973.8935400004266,
+        "mean_utility": 0.0
+      },
+      "with_message": {
+        "action_counts": {
+          "valid_split_payment": 5
+        },
+        "modal_action": "valid_split_payment",
+        "modal_share": 1.0,
+        "oracle_accuracy_rate": 0.0,
+        "mean_confidence": 1.0,
+        "mean_prompt_tokens": 937,
+        "mean_completion_tokens": 34.8,
+        "mean_token_usage": 971.8,
+        "mean_latency_ms": 2713.1476000038674,
+        "mean_utility": 0.0
+      },
+      "communication_cost": 13.0,
+      "lambda_cost": 0.001,
+      "delta_mean_utility": 0.0,
+      "mean_observed_value": -0.013000000000000001,
+      "effect": "NO OBSERVED UTILITY EFFECT",
+      "modal_action_changed_accuracy_unchanged": false
+    },
+    {
+      "case_id": "EC_035",
+      "oracle": "valid_split_payment",
+      "sender": "delivery_agent",
+      "recipient": "order_seller_agent",
+      "without_message": {
+        "action_counts": {
+          "valid_split_payment": 5
+        },
+        "modal_action": "valid_split_payment",
+        "modal_share": 1.0,
+        "oracle_accuracy_rate": 1.0,
+        "mean_confidence": 1.0,
+        "mean_prompt_tokens": 756,
+        "mean_completion_tokens": 35.6,
+        "mean_token_usage": 791.6,
+        "mean_latency_ms": 2366.7397400044138,
+        "mean_utility": 1.0
+      },
+      "with_message": {
+        "action_counts": {
+          "late_delivery_logistics": 3,
+          "valid_split_payment": 2
+        },
+        "modal_action": "late_delivery_logistics",
+        "modal_share": 0.6,
+        "oracle_accuracy_rate": 0.4,
+        "mean_confidence": 0.9,
+        "mean_prompt_tokens": 917,
+        "mean_completion_tokens": 34.6,
+        "mean_token_usage": 951.6,
+        "mean_latency_ms": 2366.6082000010647,
+        "mean_utility": 0.4
+      },
+      "communication_cost": 13.0,
+      "lambda_cost": 0.001,
+      "delta_mean_utility": -0.6,
+      "mean_observed_value": -0.613,
+      "effect": "NEGATIVE OBSERVED EFFECT",
+      "modal_action_changed_accuracy_unchanged": false
+    },
+    {
+      "case_id": "EC_035",
+      "oracle": "valid_split_payment",
+      "sender": "delivery_agent",
+      "recipient": "payment_agent",
+      "without_message": {
+        "action_counts": {
+          "valid_split_payment": 5
+        },
+        "modal_action": "valid_split_payment",
+        "modal_share": 1.0,
+        "oracle_accuracy_rate": 1.0,
+        "mean_confidence": 1.0,
+        "mean_prompt_tokens": 460,
+        "mean_completion_tokens": 35,
+        "mean_token_usage": 495,
+        "mean_latency_ms": 2400.7652400032384,
+        "mean_utility": 1.0
+      },
+      "with_message": {
+        "action_counts": {
+          "valid_split_payment": 5
+        },
+        "modal_action": "valid_split_payment",
+        "modal_share": 1.0,
+        "oracle_accuracy_rate": 1.0,
+        "mean_confidence": 0.98,
+        "mean_prompt_tokens": 619,
+        "mean_completion_tokens": 34.8,
+        "mean_token_usage": 653.8,
+        "mean_latency_ms": 2593.4919200022705,
+        "mean_utility": 1.0
+      },
+      "communication_cost": 13.0,
+      "lambda_cost": 0.001,
+      "delta_mean_utility": 0.0,
+      "mean_observed_value": -0.013000000000000001,
+      "effect": "NO OBSERVED UTILITY EFFECT",
+      "modal_action_changed_accuracy_unchanged": false
+    },
+    {
+      "case_id": "EC_035",
+      "oracle": "valid_split_payment",
+      "sender": "order_seller_agent",
+      "recipient": "delivery_agent",
+      "without_message": {
+        "action_counts": {
+          "late_delivery_logistics": 5
+        },
+        "modal_action": "late_delivery_logistics",
+        "modal_share": 1.0,
+        "oracle_accuracy_rate": 0.0,
+        "mean_confidence": 0.9,
+        "mean_prompt_tokens": 536,
+        "mean_completion_tokens": 35,
+        "mean_token_usage": 571,
+        "mean_latency_ms": 2833.2020999951055,
+        "mean_utility": 0.0
+      },
+      "with_message": {
+        "action_counts": {
+          "valid_split_payment": 5
+        },
+        "modal_action": "valid_split_payment",
+        "modal_share": 1.0,
+        "oracle_accuracy_rate": 1.0,
+        "mean_confidence": 1.0,
+        "mean_prompt_tokens": 762,
+        "mean_completion_tokens": 37,
+        "mean_token_usage": 799,
+        "mean_latency_ms": 2939.889060004498,
+        "mean_utility": 1.0
+      },
+      "communication_cost": 17.0,
+      "lambda_cost": 0.001,
+      "delta_mean_utility": 1.0,
+      "mean_observed_value": 0.983,
+      "effect": "POSITIVE OBSERVED EFFECT",
+      "modal_action_changed_accuracy_unchanged": false
+    },
+    {
+      "case_id": "EC_035",
+      "oracle": "valid_split_payment",
+      "sender": "order_seller_agent",
+      "recipient": "payment_agent",
+      "without_message": {
+        "action_counts": {
+          "valid_split_payment": 5
+        },
+        "modal_action": "valid_split_payment",
+        "modal_share": 1.0,
+        "oracle_accuracy_rate": 1.0,
+        "mean_confidence": 0.98,
+        "mean_prompt_tokens": 460,
+        "mean_completion_tokens": 34.8,
+        "mean_token_usage": 494.8,
+        "mean_latency_ms": 2676.0464399994817,
+        "mean_utility": 1.0
+      },
+      "with_message": {
+        "action_counts": {
+          "valid_split_payment": 5
+        },
+        "modal_action": "valid_split_payment",
+        "modal_share": 1.0,
+        "oracle_accuracy_rate": 1.0,
+        "mean_confidence": 1.0,
+        "mean_prompt_tokens": 686,
+        "mean_completion_tokens": 35,
+        "mean_token_usage": 721,
+        "mean_latency_ms": 2710.385019998648,
+        "mean_utility": 1.0
+      },
+      "communication_cost": 17.0,
+      "lambda_cost": 0.001,
+      "delta_mean_utility": 0.0,
+      "mean_observed_value": -0.017,
+      "effect": "NO OBSERVED UTILITY EFFECT",
+      "modal_action_changed_accuracy_unchanged": false
+    },
+    {
+      "case_id": "EC_035",
+      "oracle": "valid_split_payment",
+      "sender": "payment_agent",
+      "recipient": "delivery_agent",
+      "without_message": {
+        "action_counts": {
+          "late_delivery_logistics": 4,
+          "unsupported_late_claim": 1
+        },
+        "modal_action": "late_delivery_logistics",
+        "modal_share": 0.8,
+        "oracle_accuracy_rate": 0.0,
+        "mean_confidence": 0.9,
+        "mean_prompt_tokens": 536,
+        "mean_completion_tokens": 34.8,
+        "mean_token_usage": 570.8,
+        "mean_latency_ms": 2539.3086199997924,
+        "mean_utility": 0.0
+      },
+      "with_message": {
+        "action_counts": {
+          "late_delivery_logistics": 4,
+          "valid_split_payment": 1
+        },
+        "modal_action": "late_delivery_logistics",
+        "modal_share": 0.8,
+        "oracle_accuracy_rate": 0.2,
+        "mean_confidence": 0.8400000000000001,
+        "mean_prompt_tokens": 664,
+        "mean_completion_tokens": 34.6,
+        "mean_token_usage": 698.6,
+        "mean_latency_ms": 2872.9176200024085,
+        "mean_utility": 0.2
+      },
+      "communication_cost": 13.0,
+      "lambda_cost": 0.001,
+      "delta_mean_utility": 0.2,
+      "mean_observed_value": 0.187,
+      "effect": "POSITIVE OBSERVED EFFECT",
+      "modal_action_changed_accuracy_unchanged": false
+    },
+    {
+      "case_id": "EC_035",
+      "oracle": "valid_split_payment",
+      "sender": "payment_agent",
+      "recipient": "order_seller_agent",
+      "without_message": {
+        "action_counts": {
+          "valid_split_payment": 5
+        },
+        "modal_action": "valid_split_payment",
+        "modal_share": 1.0,
+        "oracle_accuracy_rate": 1.0,
+        "mean_confidence": 1.0,
+        "mean_prompt_tokens": 756,
+        "mean_completion_tokens": 34.2,
+        "mean_token_usage": 790.2,
+        "mean_latency_ms": 2760.5081599991536,
+        "mean_utility": 1.0
+      },
+      "with_message": {
+        "action_counts": {
+          "valid_split_payment": 5
+        },
+        "modal_action": "valid_split_payment",
+        "modal_share": 1.0,
+        "oracle_accuracy_rate": 1.0,
+        "mean_confidence": 1.0,
+        "mean_prompt_tokens": 886,
+        "mean_completion_tokens": 35,
+        "mean_token_usage": 921,
+        "mean_latency_ms": 2650.371359998826,
+        "mean_utility": 1.0
+      },
+      "communication_cost": 13.0,
+      "lambda_cost": 0.001,
+      "delta_mean_utility": 0.0,
+      "mean_observed_value": -0.013000000000000001,
+      "effect": "NO OBSERVED UTILITY EFFECT",
+      "modal_action_changed_accuracy_unchanged": false
+    },
+    {
+      "case_id": "EC_043",
+      "oracle": "unsupported_late_claim",
+      "sender": "delivery_agent",
+      "recipient": "order_seller_agent",
+      "without_message": {
+        "action_counts": {
+          "valid_split_payment": 5
+        },
+        "modal_action": "valid_split_payment",
+        "modal_share": 1.0,
+        "oracle_accuracy_rate": 0.0,
+        "mean_confidence": 1.0,
+        "mean_prompt_tokens": 764,
+        "mean_completion_tokens": 33.8,
+        "mean_token_usage": 797.8,
+        "mean_latency_ms": 2613.055160001386,
+        "mean_utility": 0.0
+      },
+      "with_message": {
+        "action_counts": {
+          "valid_split_payment": 5
+        },
+        "modal_action": "valid_split_payment",
+        "modal_share": 1.0,
+        "oracle_accuracy_rate": 0.0,
+        "mean_confidence": 0.96,
+        "mean_prompt_tokens": 932,
+        "mean_completion_tokens": 33.4,
+        "mean_token_usage": 965.4,
+        "mean_latency_ms": 2725.258239993127,
+        "mean_utility": 0.0
+      },
+      "communication_cost": 14.0,
+      "lambda_cost": 0.001,
+      "delta_mean_utility": 0.0,
+      "mean_observed_value": -0.014,
+      "effect": "NO OBSERVED UTILITY EFFECT",
+      "modal_action_changed_accuracy_unchanged": false
+    },
+    {
+      "case_id": "EC_043",
+      "oracle": "unsupported_late_claim",
+      "sender": "delivery_agent",
+      "recipient": "payment_agent",
+      "without_message": {
+        "action_counts": {
+          "valid_split_payment": 2,
+          "unsupported_late_claim": 3
+        },
+        "modal_action": "unsupported_late_claim",
+        "modal_share": 0.6,
+        "oracle_accuracy_rate": 0.6,
+        "mean_confidence": 0.8,
+        "mean_prompt_tokens": 391,
+        "mean_completion_tokens": 34.2,
+        "mean_token_usage": 425.2,
+        "mean_latency_ms": 12161.924219998764,
+        "mean_utility": 0.6
+      },
+      "with_message": {
+        "action_counts": {
+          "unsupported_late_claim": 5
+        },
+        "modal_action": "unsupported_late_claim",
+        "modal_share": 1.0,
+        "oracle_accuracy_rate": 1.0,
+        "mean_confidence": 0.96,
+        "mean_prompt_tokens": 557,
+        "mean_completion_tokens": 36,
+        "mean_token_usage": 593,
+        "mean_latency_ms": 2294.6932200022275,
+        "mean_utility": 1.0
+      },
+      "communication_cost": 14.0,
+      "lambda_cost": 0.001,
+      "delta_mean_utility": 0.4,
+      "mean_observed_value": 0.386,
+      "effect": "POSITIVE OBSERVED EFFECT",
+      "modal_action_changed_accuracy_unchanged": false
+    },
+    {
+      "case_id": "EC_043",
+      "oracle": "unsupported_late_claim",
+      "sender": "order_seller_agent",
+      "recipient": "delivery_agent",
+      "without_message": {
+        "action_counts": {
+          "late_delivery_logistics": 5
+        },
+        "modal_action": "late_delivery_logistics",
+        "modal_share": 1.0,
+        "oracle_accuracy_rate": 0.0,
+        "mean_confidence": 0.8200000000000001,
+        "mean_prompt_tokens": 542,
+        "mean_completion_tokens": 36,
+        "mean_token_usage": 578,
+        "mean_latency_ms": 2447.0543199946405,
+        "mean_utility": 0.0
+      },
+      "with_message": {
+        "action_counts": {
+          "valid_split_payment": 5
+        },
+        "modal_action": "valid_split_payment",
+        "modal_share": 1.0,
+        "oracle_accuracy_rate": 0.0,
+        "mean_confidence": 1.0,
+        "mean_prompt_tokens": 775,
+        "mean_completion_tokens": 34,
+        "mean_token_usage": 809,
+        "mean_latency_ms": 2538.4891800029436,
+        "mean_utility": 0.0
+      },
+      "communication_cost": 14.0,
+      "lambda_cost": 0.001,
+      "delta_mean_utility": 0.0,
+      "mean_observed_value": -0.014,
+      "effect": "NO OBSERVED UTILITY EFFECT",
+      "modal_action_changed_accuracy_unchanged": true
+    },
+    {
+      "case_id": "EC_043",
+      "oracle": "unsupported_late_claim",
+      "sender": "order_seller_agent",
+      "recipient": "payment_agent",
+      "without_message": {
+        "action_counts": {
+          "valid_split_payment": 1,
+          "unsupported_late_claim": 4
+        },
+        "modal_action": "unsupported_late_claim",
+        "modal_share": 0.8,
+        "oracle_accuracy_rate": 0.8,
+        "mean_confidence": 0.86,
+        "mean_prompt_tokens": 391,
+        "mean_completion_tokens": 36.6,
+        "mean_token_usage": 427.6,
+        "mean_latency_ms": 2357.0126199978404,
+        "mean_utility": 0.8
+      },
+      "with_message": {
+        "action_counts": {
+          "valid_split_payment": 5
+        },
+        "modal_action": "valid_split_payment",
+        "modal_share": 1.0,
+        "oracle_accuracy_rate": 0.0,
+        "mean_confidence": 1.0,
+        "mean_prompt_tokens": 624,
+        "mean_completion_tokens": 33.6,
+        "mean_token_usage": 657.6,
+        "mean_latency_ms": 2516.502220003167,
+        "mean_utility": 0.0
+      },
+      "communication_cost": 14.0,
+      "lambda_cost": 0.001,
+      "delta_mean_utility": -0.8,
+      "mean_observed_value": -0.8140000000000001,
+      "effect": "NEGATIVE OBSERVED EFFECT",
+      "modal_action_changed_accuracy_unchanged": false
+    },
+    {
+      "case_id": "EC_043",
+      "oracle": "unsupported_late_claim",
+      "sender": "payment_agent",
+      "recipient": "delivery_agent",
+      "without_message": {
+        "action_counts": {
+          "late_delivery_logistics": 5
+        },
+        "modal_action": "late_delivery_logistics",
+        "modal_share": 1.0,
+        "oracle_accuracy_rate": 0.0,
+        "mean_confidence": 0.8200000000000001,
+        "mean_prompt_tokens": 542,
+        "mean_completion_tokens": 36.2,
+        "mean_token_usage": 578.2,
+        "mean_latency_ms": 2561.2710599962156,
+        "mean_utility": 0.0
+      },
+      "with_message": {
+        "action_counts": {
+          "unsupported_late_claim": 5
+        },
+        "modal_action": "unsupported_late_claim",
+        "modal_share": 1.0,
+        "oracle_accuracy_rate": 1.0,
+        "mean_confidence": 0.96,
+        "mean_prompt_tokens": 638,
+        "mean_completion_tokens": 35.6,
+        "mean_token_usage": 673.6,
+        "mean_latency_ms": 2697.1399999951245,
+        "mean_utility": 1.0
+      },
+      "communication_cost": 11.0,
+      "lambda_cost": 0.001,
+      "delta_mean_utility": 1.0,
+      "mean_observed_value": 0.989,
+      "effect": "POSITIVE OBSERVED EFFECT",
+      "modal_action_changed_accuracy_unchanged": false
+    },
+    {
+      "case_id": "EC_043",
+      "oracle": "unsupported_late_claim",
+      "sender": "payment_agent",
+      "recipient": "order_seller_agent",
+      "without_message": {
+        "action_counts": {
+          "valid_split_payment": 5
+        },
+        "modal_action": "valid_split_payment",
+        "modal_share": 1.0,
+        "oracle_accuracy_rate": 0.0,
+        "mean_confidence": 1.0,
+        "mean_prompt_tokens": 764,
+        "mean_completion_tokens": 33.4,
+        "mean_token_usage": 797.4,
+        "mean_latency_ms": 2638.7647399969865,
+        "mean_utility": 0.0
+      },
+      "with_message": {
+        "action_counts": {
+          "unsupported_late_claim": 5
+        },
+        "modal_action": "unsupported_late_claim",
+        "modal_share": 1.0,
+        "oracle_accuracy_rate": 1.0,
+        "mean_confidence": 1.0,
+        "mean_prompt_tokens": 862,
+        "mean_completion_tokens": 35,
+        "mean_token_usage": 897,
+        "mean_latency_ms": 2677.0407799980603,
+        "mean_utility": 1.0
+      },
+      "communication_cost": 11.0,
+      "lambda_cost": 0.001,
+      "delta_mean_utility": 1.0,
+      "mean_observed_value": 0.989,
+      "effect": "POSITIVE OBSERVED EFFECT",
+      "modal_action_changed_accuracy_unchanged": false
+    }
+  ],
+  "by_root_cause": [
+    {
+      "root_cause": "canceled_order_paid",
+      "positive": 2,
+      "zero": 4,
+      "negative": 0,
+      "pair_count": 6
+    },
+    {
+      "root_cause": "unavailable_order_paid",
+      "positive": 2,
+      "zero": 4,
+      "negative": 0,
+      "pair_count": 6
+    },
+    {
+      "root_cause": "late_delivery_seller",
+      "positive": 0,
+      "zero": 6,
+      "negative": 0,
+      "pair_count": 6
+    },
+    {
+      "root_cause": "late_delivery_logistics",
+      "positive": 1,
+      "zero": 5,
+      "negative": 0,
+      "pair_count": 6
+    },
+    {
+      "root_cause": "valid_split_payment",
+      "positive": 2,
+      "zero": 3,
+      "negative": 1,
+      "pair_count": 6
+    },
+    {
+      "root_cause": "unsupported_late_claim",
+      "positive": 3,
+      "zero": 2,
+      "negative": 1,
+      "pair_count": 6
+    }
+  ],
+  "by_sender_recipient": [
+    {
+      "sender": "order_seller_agent",
+      "recipient": "payment_agent",
+      "mean_delta_utility": 0.19999999999999998,
+      "positive_count": 2,
+      "zero_count": 3,
+      "negative_count": 1
+    },
+    {
+      "sender": "order_seller_agent",
+      "recipient": "delivery_agent",
+      "mean_delta_utility": 0.5,
+      "positive_count": 3,
+      "zero_count": 3,
+      "negative_count": 0
+    },
+    {
+      "sender": "payment_agent",
+      "recipient": "order_seller_agent",
+      "mean_delta_utility": 0.16666666666666666,
+      "positive_count": 1,
+      "zero_count": 5,
+      "negative_count": 0
+    },
+    {
+      "sender": "payment_agent",
+      "recipient": "delivery_agent",
+      "mean_delta_utility": 0.2,
+      "positive_count": 2,
+      "zero_count": 4,
+      "negative_count": 0
+    },
+    {
+      "sender": "delivery_agent",
+      "recipient": "order_seller_agent",
+      "mean_delta_utility": -0.06666666666666667,
+      "positive_count": 1,
+      "zero_count": 4,
+      "negative_count": 1
+    },
+    {
+      "sender": "delivery_agent",
+      "recipient": "payment_agent",
+      "mean_delta_utility": 0.06666666666666667,
+      "positive_count": 1,
+      "zero_count": 5,
+      "negative_count": 0
+    }
+  ],
+  "overall": {
+    "total_pairs": 36,
+    "positive_effect_count": 10,
+    "zero_effect_count": 24,
+    "negative_effect_count": 2
+  }
+}

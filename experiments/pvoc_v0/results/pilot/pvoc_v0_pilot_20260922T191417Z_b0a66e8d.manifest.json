@@ -1,0 +1,50 @@
+{
+  "run_id": "pvoc_v0_pilot_20260922T191417Z_b0a66e8d",
+  "experiment": "pvoc_v0_stratified_pilot",
+  "status": "VALID",
+  "started_at": "2026-09-22T19:14:17.358055+00:00",
+  "completed_at": "2026-09-22T19:33:27.344181+00:00",
+  "pilot_case_ids": [
+    "EC_001",
+    "EC_010",
+    "EC_019",
+    "EC_027",
+    "EC_035",
+    "EC_043"
+  ],
+  "oracle_actions": {
+    "EC_001": "canceled_order_paid",
+    "EC_010": "unavailable_order_paid",
+    "EC_019": "late_delivery_seller",
+    "EC_027": "late_delivery_logistics",
+    "EC_035": "valid_split_payment",
+    "EC_043": "unsupported_late_claim"
+  },
+  "oracle_classes": [
+    "canceled_order_paid",
+    "unavailable_order_paid",
+    "late_delivery_seller",
+    "late_delivery_logistics",
+    "valid_split_payment",
+    "unsupported_late_claim"
+  ],
+  "model": "google/gemini-2.5-flash",
+  "n_trials_per_condition": 5,
+  "directed_pairs_per_case": 6,
+  "expected_frozen_messages": 36,
+  "actual_frozen_messages": 36,
+  "expected_sender_executions": 18,
+  "actual_sender_executions": 18,
+  "expected_recipient_executions": 360,
+  "actual_recipient_executions": 360,
+  "lambda_communication_cost": 0.001,
+  "sanity_checks": {
+    "all_six_oracle_classes_correct": true,
+    "fixed_candidate_messages": true,
+    "stable_observation_fingerprints": true,
+    "correct_pair_counts": true,
+    "oracle_hidden": true,
+    "private_observation_isolation": true
+  },
+  "notes": "Research-only six-case stratified pilot; no production graph or learned estimator."
+}

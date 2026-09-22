@@ -1,0 +1,2 @@
+{"run_id": "pvoc_v1_20260922T203407Z_f64d51a4", "case_id": "EC_001", "oracle_action": "canceled_order_paid", "status": "COMPLETE", "message_count": 6, "trial_count": 60, "completed_at": "2026-09-22T20:48:28.752500+00:00"}
+{"run_id": "pvoc_v1_20260922T203407Z_f64d51a4", "case_id": "EC_010", "oracle_action": "unavailable_order_paid", "status": "COMPLETE", "message_count": 6, "trial_count": 60, "completed_at": "2026-09-22T20:51:37.510282+00:00"}

@@ -19,6 +19,9 @@ RootCauseCode = Literal[
     "unsupported_late_claim",
 ]
 StabilityCondition = Literal["with_message", "without_message"]
+PilotCondition = Literal["with_message", "without_message"]
+DatasetV1Condition = Literal["with_message", "without_message"]
+DatasetV1EffectLabel = Literal["POSITIVE", "ZERO", "NEGATIVE"]
 
 
 class OrderSellerItemEvidence(StrictModel):
@@ -181,3 +184,109 @@ class StabilityTrialRecord(StrictModel):
     candidate_message_content_hash: str = Field(min_length=8, max_length=128)
     communication_cost: float = Field(ge=0)
     lambda_cost: float = Field(ge=0)
+
+
+class PilotMessageRecord(StrictModel):
+    """One frozen candidate message in the stratified multi-case pilot."""
+
+    pilot_run_id: str = Field(min_length=1, max_length=128)
+    case_id: str = Field(pattern=r"^EC_\d{3}$")
+    oracle_action: RootCauseCode
+    sender: PVoCAgentName
+    recipient: PVoCAgentName
+    content: str = Field(min_length=1, max_length=2000)
+    evidence_ids: list[str] = Field(default_factory=list, max_length=20)
+    candidate_message_id: str = Field(min_length=8, max_length=128)
+    candidate_message_content_hash: str = Field(min_length=8, max_length=128)
+    communication_cost: float = Field(ge=0)
+    lambda_cost: float = Field(ge=0)
+
+
+class PilotTrialRecord(StrictModel):
+    """One repeated recipient execution in the six-case pilot."""
+
+    pilot_run_id: str = Field(min_length=1, max_length=128)
+    case_id: str = Field(pattern=r"^EC_\d{3}$")
+    oracle_action: RootCauseCode
+    sender: PVoCAgentName
+    recipient: PVoCAgentName
+    trial_index: int = Field(ge=1)
+    condition: PilotCondition
+    predicted_root_cause: RootCauseCode
+    confidence: float = Field(ge=0, le=1)
+    short_reason: str = Field(min_length=1, max_length=400)
+    utility: float
+    prompt_tokens: int = Field(ge=0)
+    completion_tokens: int = Field(ge=0)
+    latency_ms: float = Field(ge=0)
+    observation_fingerprint: str = Field(min_length=8, max_length=128)
+    candidate_message_id: str = Field(min_length=8, max_length=128)
+    candidate_message_content_hash: str = Field(min_length=8, max_length=128)
+    communication_cost: float = Field(ge=0)
+    lambda_cost: float = Field(ge=0)
+
+
+class DatasetV1MessageRecord(StrictModel):
+    """One frozen message persisted by the full counterfactual dataset run."""
+
+    run_id: str = Field(min_length=1, max_length=128)
+    case_id: str = Field(pattern=r"^EC_\d{3}$")
+    oracle_action: RootCauseCode
+    sender: PVoCAgentName
+    recipient: PVoCAgentName
+    sender_predicted_root_cause: RootCauseCode
+    sender_confidence: float = Field(ge=0, le=1)
+    candidate_message: str = Field(min_length=1, max_length=2000)
+    evidence_ids: list[str] = Field(default_factory=list, max_length=20)
+    candidate_message_id: str = Field(min_length=8, max_length=128)
+    candidate_message_content_hash: str = Field(min_length=8, max_length=128)
+    communication_cost: float = Field(ge=0)
+    lambda_cost: float = Field(ge=0)
+    recipient_observation_fingerprint: str = Field(min_length=8, max_length=128)
+
+
+class DatasetV1TrialRecord(StrictModel):
+    """One raw repeated recipient execution in dataset v1."""
+
+    run_id: str = Field(min_length=1, max_length=128)
+    case_id: str = Field(pattern=r"^EC_\d{3}$")
+    oracle_action: RootCauseCode
+    sender: PVoCAgentName
+    recipient: PVoCAgentName
+    candidate_message_id: str = Field(min_length=8, max_length=128)
+    trial_index: int = Field(ge=1)
+    condition: DatasetV1Condition
+    predicted_root_cause: RootCauseCode
+    confidence: float = Field(ge=0, le=1)
+    short_reason: str = Field(min_length=1, max_length=400)
+    utility: float
+    prompt_tokens: int = Field(ge=0)
+    completion_tokens: int = Field(ge=0)
+    latency_ms: float = Field(ge=0)
+    observation_fingerprint: str = Field(min_length=8, max_length=128)
+    candidate_message_content_hash: str = Field(min_length=8, max_length=128)
+    communication_cost: float = Field(ge=0)
+    lambda_cost: float = Field(ge=0)
+
+
+class DatasetV1DatasetSample(StrictModel):
+    """One aggregated candidate-message sample in dataset v1."""
+
+    run_id: str = Field(min_length=1, max_length=128)
+    case_id: str = Field(pattern=r"^EC_\d{3}$")
+    oracle_action: RootCauseCode
+    sender: PVoCAgentName
+    recipient: PVoCAgentName
+    candidate_message: str = Field(min_length=1, max_length=2000)
+    candidate_message_id: str = Field(min_length=8, max_length=128)
+    message_content_hash: str = Field(min_length=8, max_length=128)
+    evidence_ids: list[str] = Field(default_factory=list, max_length=20)
+    communication_cost: float = Field(ge=0)
+    lambda_cost: float = Field(ge=0)
+    without_message: dict[str, object]
+    with_message: dict[str, object]
+    delta_mean_utility: float
+    repeated_mean_value: float
+    effect_label: DatasetV1EffectLabel
+    action_changed: bool
+    accuracy_changed: bool

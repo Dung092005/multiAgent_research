@@ -14,6 +14,7 @@ from openai import (
     APITimeoutError,
     AsyncOpenAI,
     InternalServerError,
+    LengthFinishReasonError,
     OpenAIError,
     RateLimitError,
 )
@@ -185,6 +186,8 @@ class ResearchVertexStructuredLLM:
         if isinstance(exc, ResearchStructuredLLMError):
             return True
         if isinstance(exc, ValidationError):
+            return True
+        if isinstance(exc, LengthFinishReasonError):
             return True
         if isinstance(exc, (APIConnectionError, APITimeoutError, InternalServerError, RateLimitError)):
             return True

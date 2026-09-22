@@ -1,6 +1,7 @@
 from types import SimpleNamespace
 
 import pytest
+from openai import LengthFinishReasonError
 
 from experiments.pvoc_v0.research_llm import (
     ResearchStructuredLLMError,
@@ -109,3 +110,24 @@ async def test_research_adapter_retries_are_bounded() -> None:
         )
 
     assert len(client.calls) == 3
+
+
+@pytest.mark.asyncio
+async def test_research_adapter_retries_length_finish_reason() -> None:
+    completion = SimpleNamespace(
+        choices=[],
+        usage=SimpleNamespace(prompt_tokens=2, completion_tokens=3),
+    )
+    client = FakeParseClient(
+        [LengthFinishReasonError(completion=completion), parsed_completion("valid_split_payment")]
+    )
+    adapter = ResearchVertexStructuredLLM(FakeSettings(), client=client, backoff_seconds=0)
+
+    response = await adapter.structured(
+        system_prompt="Return a decision.",
+        user_payload={"probe": "length-retry"},
+        response_model=DecisionResponse,
+    )
+
+    assert response.value.predicted_root_cause == "valid_split_payment"
+    assert len(client.calls) == 2
