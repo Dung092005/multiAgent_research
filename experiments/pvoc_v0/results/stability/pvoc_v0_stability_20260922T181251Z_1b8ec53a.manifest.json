@@ -1,0 +1,20 @@
+{
+  "run_id": "pvoc_v0_stability_20260922T181251Z_1b8ec53a",
+  "experiment": "pvoc_v0_stability",
+  "created_at": "2026-09-22T18:12:51.067211+00:00",
+  "case_id": "EC_001",
+  "source_jsonl": "experiments\\pvoc_v0\\results\\pvoc_v0_20260921T140436Z_3bac35dd.jsonl",
+  "frozen_candidate_message_count": 6,
+  "n_trials_per_condition": 10,
+  "expected_recipient_executions": 120,
+  "actual_recipient_executions": 120,
+  "model": "google/gemini-2.5-flash",
+  "oracle": "EC_POLICY_V1 action from frozen successful artifact",
+  "sanity_checks": {
+    "fixed_candidate_messages": true,
+    "all_observation_fingerprints_stable": true,
+    "all_pair_counts_correct": true,
+    "oracle_hidden_from_recipient": true
+  },
+  "notes": "Research-only repeated-decision stability run; no sender calls."
+}

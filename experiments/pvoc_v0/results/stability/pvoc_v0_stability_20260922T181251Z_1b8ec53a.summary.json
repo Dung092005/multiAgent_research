@@ -1,0 +1,216 @@
+{
+  "experiment": "pvoc_v0_stability",
+  "case_id": "EC_001",
+  "n_trials_per_condition": 10,
+  "directed_pair_count": 6,
+  "total_recipient_executions": 120,
+  "sanity_checks": {
+    "fixed_candidate_messages": true,
+    "all_observation_fingerprints_stable": true,
+    "all_pair_counts_correct": true,
+    "oracle_hidden_from_recipient": true
+  },
+  "pairs": [
+    {
+      "case_id": "EC_001",
+      "sender": "delivery_agent",
+      "recipient": "order_seller_agent",
+      "without_message": {
+        "action_counts": {
+          "canceled_order_paid": 10
+        },
+        "modal_action": "canceled_order_paid",
+        "modal_share": 1.0,
+        "accuracy_rate": 1.0,
+        "mean_confidence": 0.99,
+        "mean_token_usage": 378.6,
+        "mean_latency_ms": 2993.275999999605,
+        "mean_utility": 1.0
+      },
+      "with_message": {
+        "action_counts": {
+          "canceled_order_paid": 10
+        },
+        "modal_action": "canceled_order_paid",
+        "modal_share": 1.0,
+        "accuracy_rate": 1.0,
+        "mean_confidence": 1.0,
+        "mean_token_usage": 473.8,
+        "mean_latency_ms": 2775.874119999935,
+        "mean_utility": 1.0
+      },
+      "communication_cost": 12.0,
+      "lambda_cost": 0.001,
+      "delta_mean_utility": 0.0,
+      "mean_observed_value": -0.012
+    },
+    {
+      "case_id": "EC_001",
+      "sender": "delivery_agent",
+      "recipient": "payment_agent",
+      "without_message": {
+        "action_counts": {
+          "valid_split_payment": 10
+        },
+        "modal_action": "valid_split_payment",
+        "modal_share": 1.0,
+        "accuracy_rate": 0.0,
+        "mean_confidence": 0.7200000000000001,
+        "mean_token_usage": 423.7,
+        "mean_latency_ms": 2539.0612700008205,
+        "mean_utility": 0.0
+      },
+      "with_message": {
+        "action_counts": {
+          "late_delivery_logistics": 9,
+          "unsupported_late_claim": 1
+        },
+        "modal_action": "late_delivery_logistics",
+        "modal_share": 0.9,
+        "accuracy_rate": 0.0,
+        "mean_confidence": 0.77,
+        "mean_token_usage": 518.8,
+        "mean_latency_ms": 2442.781870001636,
+        "mean_utility": 0.0
+      },
+      "communication_cost": 12.0,
+      "lambda_cost": 0.001,
+      "delta_mean_utility": 0.0,
+      "mean_observed_value": -0.012
+    },
+    {
+      "case_id": "EC_001",
+      "sender": "order_seller_agent",
+      "recipient": "delivery_agent",
+      "without_message": {
+        "action_counts": {
+          "late_delivery_logistics": 10
+        },
+        "modal_action": "late_delivery_logistics",
+        "modal_share": 1.0,
+        "accuracy_rate": 0.0,
+        "mean_confidence": 0.8,
+        "mean_token_usage": 389.8,
+        "mean_latency_ms": 2479.7883100021863,
+        "mean_utility": 0.0
+      },
+      "with_message": {
+        "action_counts": {
+          "canceled_order_paid": 9,
+          "late_delivery_logistics": 1
+        },
+        "modal_action": "canceled_order_paid",
+        "modal_share": 0.9,
+        "accuracy_rate": 0.9,
+        "mean_confidence": 0.97,
+        "mean_token_usage": 488,
+        "mean_latency_ms": 2480.6051699997624,
+        "mean_utility": 0.9
+      },
+      "communication_cost": 12.0,
+      "lambda_cost": 0.001,
+      "delta_mean_utility": 0.9,
+      "mean_observed_value": 0.888
+    },
+    {
+      "case_id": "EC_001",
+      "sender": "order_seller_agent",
+      "recipient": "payment_agent",
+      "without_message": {
+        "action_counts": {
+          "valid_split_payment": 8,
+          "unsupported_late_claim": 2
+        },
+        "modal_action": "valid_split_payment",
+        "modal_share": 0.8,
+        "accuracy_rate": 0.0,
+        "mean_confidence": 0.79,
+        "mean_token_usage": 423.9,
+        "mean_latency_ms": 2472.794760001125,
+        "mean_utility": 0.0
+      },
+      "with_message": {
+        "action_counts": {
+          "canceled_order_paid": 10
+        },
+        "modal_action": "canceled_order_paid",
+        "modal_share": 1.0,
+        "accuracy_rate": 1.0,
+        "mean_confidence": 1.0,
+        "mean_token_usage": 523.1,
+        "mean_latency_ms": 2307.1632899998804,
+        "mean_utility": 1.0
+      },
+      "communication_cost": 12.0,
+      "lambda_cost": 0.001,
+      "delta_mean_utility": 1.0,
+      "mean_observed_value": 0.988
+    },
+    {
+      "case_id": "EC_001",
+      "sender": "payment_agent",
+      "recipient": "delivery_agent",
+      "without_message": {
+        "action_counts": {
+          "late_delivery_logistics": 10
+        },
+        "modal_action": "late_delivery_logistics",
+        "modal_share": 1.0,
+        "accuracy_rate": 0.0,
+        "mean_confidence": 0.8,
+        "mean_token_usage": 390,
+        "mean_latency_ms": 2538.9835700014373,
+        "mean_utility": 0.0
+      },
+      "with_message": {
+        "action_counts": {
+          "unsupported_late_claim": 10
+        },
+        "modal_action": "unsupported_late_claim",
+        "modal_share": 1.0,
+        "accuracy_rate": 0.0,
+        "mean_confidence": 0.7,
+        "mean_token_usage": 483,
+        "mean_latency_ms": 2491.2744499975815,
+        "mean_utility": 0.0
+      },
+      "communication_cost": 11.0,
+      "lambda_cost": 0.001,
+      "delta_mean_utility": 0.0,
+      "mean_observed_value": -0.011
+    },
+    {
+      "case_id": "EC_001",
+      "sender": "payment_agent",
+      "recipient": "order_seller_agent",
+      "without_message": {
+        "action_counts": {
+          "canceled_order_paid": 10
+        },
+        "modal_action": "canceled_order_paid",
+        "modal_share": 1.0,
+        "accuracy_rate": 1.0,
+        "mean_confidence": 0.98,
+        "mean_token_usage": 377.9,
+        "mean_latency_ms": 2506.2873000017134,
+        "mean_utility": 1.0
+      },
+      "with_message": {
+        "action_counts": {
+          "canceled_order_paid": 10
+        },
+        "modal_action": "canceled_order_paid",
+        "modal_share": 1.0,
+        "accuracy_rate": 1.0,
+        "mean_confidence": 0.8,
+        "mean_token_usage": 474.8,
+        "mean_latency_ms": 2471.475820001797,
+        "mean_utility": 1.0
+      },
+      "communication_cost": 11.0,
+      "lambda_cost": 0.001,
+      "delta_mean_utility": 0.0,
+      "mean_observed_value": -0.011
+    }
+  ]
+}

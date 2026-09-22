@@ -18,6 +18,7 @@ RootCauseCode = Literal[
     "valid_split_payment",
     "unsupported_late_claim",
 ]
+StabilityCondition = Literal["with_message", "without_message"]
 
 
 class OrderSellerItemEvidence(StrictModel):
@@ -157,3 +158,26 @@ class CounterfactualRecord(StrictModel):
         ):
             raise ValueError("deliver and drop must use the same private observation")
         return self
+
+
+class StabilityTrialRecord(StrictModel):
+    """One raw repeated recipient execution for the EC_001 stability study."""
+
+    case_id: str = Field(pattern=r"^EC_\d{3}$")
+    sender: PVoCAgentName
+    recipient: PVoCAgentName
+    trial_index: int = Field(ge=1)
+    condition: StabilityCondition
+    predicted_root_cause: RootCauseCode
+    confidence: float = Field(ge=0, le=1)
+    short_reason: str = Field(min_length=1, max_length=400)
+    oracle_action: RootCauseCode
+    utility: float
+    prompt_tokens: int = Field(ge=0)
+    completion_tokens: int = Field(ge=0)
+    latency_ms: float = Field(ge=0)
+    observation_fingerprint: str = Field(min_length=8, max_length=128)
+    candidate_message_id: str = Field(min_length=8, max_length=128)
+    candidate_message_content_hash: str = Field(min_length=8, max_length=128)
+    communication_cost: float = Field(ge=0)
+    lambda_cost: float = Field(ge=0)
