@@ -1,51 +1,53 @@
-# Value-Aware Selective Communication in LLM Multi-Agent Systems
+# Giao tiếp chọn lọc có nhận thức giá trị trong hệ thống đa tác tử LLM
 
-Experimental study of prospective message value using controlled counterfactual
-communication between specialized LLM agents.
+Nghiên cứu thực nghiệm về giá trị của thông điệp trước khi truyền, sử dụng
+các thí nghiệm phản thực có kiểm soát giữa những tác tử LLM chuyên biệt.
 
-## Current research status — September 2026
+## Trạng thái nghiên cứu hiện tại — tháng 9/2026
 
-| Research component | Status |
+| Thành phần nghiên cứu | Trạng thái |
 | --- | --- |
-| Three-agent research environment | **COMPLETE** |
-| Private-information separation | **COMPLETE** |
-| Counterfactual WITH vs WITHOUT apparatus | **COMPLETE** |
-| Reliability / stability validation | **COMPLETE** |
-| Six-class stratified pilot | **COMPLETE** |
-| 50-case Counterfactual Message-Value Dataset v1 | **COMPLETE** |
-| Prospective value estimator V_hat | **NOT YET IMPLEMENTED** |
+| Môi trường nghiên cứu gồm ba tác tử | **HOÀN THÀNH** |
+| Tách biệt thông tin riêng tư | **HOÀN THÀNH** |
+| Bộ thí nghiệm phản thực WITH và WITHOUT | **HOÀN THÀNH** |
+| Kiểm tra độ ổn định / độ tin cậy | **HOÀN THÀNH** |
+| Pilot phân tầng theo sáu lớp nguyên nhân | **HOÀN THÀNH** |
+| Counterfactual Message-Value Dataset v1 gồm 50 case | **HOÀN THÀNH** |
+| Bộ ước lượng giá trị triển vọng V_hat | **CHƯA TRIỂN KHAI** |
 
-Dataset v1 currently contains:
+Dataset v1 hiện có:
 
 ~~~text
-50 cases · 300 candidate messages · 3,000 recipient trials · 300 aggregated samples
+50 case · 300 candidate message · 3.000 recipient trial · 300 mẫu tổng hợp
 ~~~
 
-This repository is now primarily a research implementation and experimental
-testbed. The original Olist dispute application is the environment from which
-the research setup was constructed.
+Repository này hiện được tổ chức chủ yếu như một implementation và testbed
+phục vụ nghiên cứu. Ứng dụng điều tra tranh chấp Olist ban đầu là môi trường
+thực nghiệm được dùng để xây dựng thiết kế nghiên cứu.
 
-## 1. Research context
+## 1. Bối cảnh nghiên cứu
 
-In a multi-agent system, agents can communicate or merge information without
-knowing whether a particular message will improve another agent's future
-decision. This project studies the question:
+Trong một hệ thống đa tác tử, các tác tử có thể trao đổi hoặc hợp nhất thông
+tin mà không biết một thông điệp cụ thể có thực sự cải thiện quyết định tiếp
+theo của tác tử nhận hay không.
 
-> Can an agent estimate whether a candidate message is worth sending before it
-> is transmitted?
+Câu hỏi trung tâm của nghiên cứu là:
 
-The current work measures message value empirically through controlled
-counterfactual trials. The prospective estimator that would predict this value
-before transmission is the next research stage; it does not exist yet.
+> Một tác tử có thể ước lượng liệu một candidate message có đáng được gửi đi
+> trước khi truyền nó hay không?
 
-## 2. What I started with
+Giai đoạn hiện tại đo giá trị thông điệp bằng các thí nghiệm phản thực có kiểm
+soát. Bộ ước lượng triển vọng dự đoán giá trị trước khi truyền là bước tiếp
+theo và chưa được triển khai.
 
-Before the research work, I had a working e-commerce dispute investigation
-system built around the public Brazilian Olist dataset. A customer dispute was
-investigated by three specialized agents, whose findings were combined and
-checked by deterministic code.
+## 2. Hệ thống ban đầu
 
-The original high-level system was:
+Trước khi bắt đầu phần nghiên cứu, tôi đã có một hệ thống điều tra tranh chấp
+thương mại điện tử dựa trên bộ dữ liệu công khai Brazilian Olist. Một tranh
+chấp của khách hàng được phân tích bởi ba tác tử chuyên biệt; kết quả của các
+tác tử được tổng hợp và kiểm tra bằng mã xác định.
+
+Kiến trúc cấp cao của hệ thống ban đầu:
 
 ~~~text
 Customer dispute
@@ -73,15 +75,15 @@ Customer dispute
                       Final result
 ~~~
 
-The three specialists had distinct evidence responsibilities:
+Ba specialist agent có phạm vi bằng chứng riêng:
 
-| Specialist | Evidence used |
+| Specialist agent | Bằng chứng được sử dụng |
 | --- | --- |
-| Order/Seller Agent | Order status, order items, and seller evidence |
-| Payment Agent | Payment records, totals, and payment structure |
-| Delivery Agent | Delivery timeline and shipping deadlines |
+| Order/Seller Agent | Trạng thái order, order item và bằng chứng seller |
+| Payment Agent | Payment record, tổng tiền và cấu trúc thanh toán |
+| Delivery Agent | Timeline giao hàng và các thời hạn vận chuyển |
 
-The deterministic PolicyEngine already defined six root-cause classes:
+PolicyEngine xác định sáu lớp nguyên nhân gốc:
 
 1. canceled_order_paid
 2. unavailable_order_paid
@@ -90,39 +92,37 @@ The deterministic PolicyEngine already defined six root-cause classes:
 5. valid_split_payment
 6. unsupported_late_claim
 
-Because these decisions were defined in deterministic code, PolicyEngine could
-later serve as the experimental oracle / ground truth. The original application
-is therefore useful as a grounded environment, while the research question is
-evaluated in a separate harness.
+PolicyEngine là mã xác định. Vì vậy, nó có thể được dùng làm oracle / ground
+truth trong các thí nghiệm sau này. Ứng dụng ban đầu cung cấp môi trường dữ
+liệu thực tế; câu hỏi nghiên cứu được kiểm tra trong research harness riêng.
 
-## 3. From application to research testbed
+## 3. Từ ứng dụng ban đầu đến research testbed
 
-The original system was designed to complete an investigation. It did not
-measure the value of an individual inter-agent message. To turn it into a
-controlled communication experiment, I added the isolated research harness in
+Hệ thống ban đầu được xây dựng để hoàn tất một cuộc điều tra. Nó chưa đo giá
+trị của từng thông điệp giữa các tác tử. Để biến môi trường này thành một thí
+nghiệm giao tiếp có kiểm soát, tôi đã tạo research harness độc lập tại
 [experiments/pvoc_v0/](experiments/pvoc_v0/).
 
 ~~~text
-Existing Olist application
+Ứng dụng điều tra Olist ban đầu
         =
-grounded research environment
+môi trường dữ liệu cho nghiên cứu
 
 PVoC v0 harness
         =
-controlled experimental apparatus for measuring message value
+bộ máy thí nghiệm để đo giá trị thông điệp
 ~~~
 
-The production application is not itself the research contribution. It provides
-realistic cases, specialist evidence, existing agent roles, and the deterministic
-oracle. The PVoC harness defines the private observations, frozen candidate
-messages, counterfactual branches, and measurements needed to study communication
-value.
+Ứng dụng production không phải là đóng góp nghiên cứu trực tiếp. Nó cung cấp
+case thực tế, bằng chứng có cấu trúc, vai trò của các specialist agent và
+oracle xác định. PVoC harness định nghĩa private observation, candidate
+message cố định, các nhánh phản thực và phép đo cần thiết cho nghiên cứu.
 
 ## 4. Research testbed
 
-For each grounded case, the harness constructs three private observations. Each
-agent makes decisions from its own observation, and a sender can construct a
-candidate message for one recipient.
+Với mỗi grounded case, harness tạo ba private observation. Mỗi agent ra quyết
+định từ observation của chính mình; sender có thể tạo một candidate message
+cho một recipient.
 
 ~~~text
 Olist case
@@ -139,47 +139,46 @@ Agent A             Agent B            Agent C
     +-------- candidate message --------+
                          |
                          v
-                 WITH vs WITHOUT trial
+                 WITH và WITHOUT trial
 ~~~
 
-For every directed sender-recipient pair, the experiment is:
+Với mỗi cặp sender-recipient có hướng, thí nghiệm thực hiện:
 
 ~~~mermaid
 flowchart TD
     S[Sender decision] --> M[Candidate message m]
     M --> W[DELIVER m]
     M --> X[DROP m]
-    W --> SW[Same recipient private observation<br/>+ message]
-    X --> SX[Same recipient private observation<br/>+ no message]
+    W --> SW[Cùng recipient private observation<br/>+ message]
+    X --> SX[Cùng recipient private observation<br/>+ không có message]
     SW --> DW[Decision WITH]
     SX --> DX[Decision WITHOUT]
-    DW --> C[Compare utility<br/>after both decisions exist]
+    DW --> C[So sánh utility<br/>sau cả hai quyết định]
     DX --> C
     C --> V[Observed message value]
 ~~~
 
-The experimental controls are:
+Các nguyên tắc kiểm soát:
 
-- Each agent receives only its own private observation.
-- The recipient does not see global state, the oracle, or the sender's private
-  observation.
-- WITH adds only the frozen CandidateMessage.
-- WITHOUT uses the same recipient private observation without that message.
-- Deep copies and observation fingerprints verify that the recipient state is
-  otherwise equal.
-- PolicyEngine is consulted only after the recipient decision, to calculate
-  utility.
+- Mỗi agent chỉ nhận private observation của chính mình.
+- Recipient không nhìn thấy global state, oracle hoặc private observation của
+  sender.
+- Điều kiện WITH chỉ bổ sung candidate message đã được freeze.
+- Điều kiện WITHOUT dùng cùng recipient private observation nhưng không có
+  message.
+- Deep copy và observation fingerprint kiểm tra rằng state của recipient không
+  thay đổi ngoài việc deliver message.
+- PolicyEngine chỉ được dùng sau khi recipient đã ra quyết định để tính utility.
 
-## 5. The three agents and communication edges
+## 5. Ba agent và sáu communication edge
 
-| Agent | Private evidence | Role in the experiment |
+| Agent | Bằng chứng riêng tư | Vai trò trong thí nghiệm |
 | --- | --- | --- |
-| Order/Seller | Order status, items, seller records | Sends or receives order and seller evidence |
-| Payment | Payment rows, totals, payment structure | Sends or receives payment evidence |
-| Delivery | Delivery timeline and shipping deadlines | Sends or receives delivery evidence |
+| Order/Seller | Order status, item, seller record | Gửi hoặc nhận bằng chứng order và seller |
+| Payment | Payment row, total và payment structure | Gửi hoặc nhận bằng chứng payment |
+| Delivery | Delivery timeline và shipping deadline | Gửi hoặc nhận bằng chứng delivery |
 
-Each of the three agents can send to the other two, producing six directed
-communication edges:
+Mỗi agent có thể gửi cho hai agent còn lại, tạo thành sáu directed edge:
 
 ~~~text
 Order/Seller -> Payment
@@ -190,102 +189,103 @@ Delivery    -> Order/Seller
 Delivery    -> Payment
 ~~~
 
-Each candidate message contains a case identifier, sender, recipient, compact
-content, and evidence identifiers. Sender messages are generated once and
-frozen before repeated recipient trials.
+Mỗi candidate message gồm case identifier, sender, recipient, nội dung ngắn
+và evidence identifier. Message của sender được tạo một lần và freeze trước
+khi chạy các recipient trial lặp lại.
 
-## 6. How message value is currently measured
+## 6. Cách đo giá trị thông điệp hiện tại
 
-The original single paired run uses:
+Single paired run ban đầu sử dụng:
 
 ~~~text
 V_star = U_with - U_without - lambda * communication_cost
 ~~~
 
-Repeated trials use a separately named exploratory quantity:
+Các repeated trial sử dụng một đại lượng exploratory có tên riêng:
 
 ~~~text
 delta_mean_utility = mean(U_with) - mean(U_without)
 repeated_mean_value = delta_mean_utility - lambda * communication_cost
 ~~~
 
-Current utility is deliberately simple:
+Utility hiện tại được cố ý giữ đơn giản:
 
 ~~~text
-correct root cause   = 1
-incorrect root cause = 0
+root cause đúng   = 1
+root cause sai    = 0
 ~~~
 
-These are observed counterfactual values: both WITH and WITHOUT outcomes are
-actually executed. They are not a prospective estimator. In particular, no
-V_hat currently predicts value before a message is transmitted.
+Đây là observed counterfactual value: cả hai kết quả WITH và WITHOUT đều
+được chạy thật. Nó chưa phải prospective estimator. Cụ thể, V_hat chưa dự
+đoán giá trị trước khi message được truyền.
 
-## 7. What has been completed
+## 7. Các milestone đã hoàn thành
 
-### Milestone 1 — Research harness and smoke test
+### Milestone 1 — Research harness và smoke test
 
-**Status: COMPLETE**
+**Trạng thái: HOÀN THÀNH**
 
-The first real experiment established:
+Thí nghiệm thực đầu tiên đã thiết lập:
 
-- three private agents;
-- six directed candidate messages;
-- a controlled WITH vs WITHOUT counterfactual branch;
-- same-recipient-state fingerprint validation;
-- the deterministic PolicyEngine oracle; and
-- real Vertex/Gemini structured-output execution.
+- ba private agent;
+- sáu directed candidate message;
+- nhánh counterfactual WITH và WITHOUT;
+- kiểm tra fingerprint để bảo đảm cùng recipient state;
+- PolicyEngine xác định làm oracle; và
+- thực thi structured output thực tế qua Vertex/Gemini.
 
-The EC_001 run produced meaningful message-value differences between
-communication edges.
+Run EC_001 đã tạo ra các khác biệt có ý nghĩa giữa những communication edge
+khác nhau.
 
 ### Milestone 2 — Stability study
 
-**Status: COMPLETE**
+**Trạng thái: HOÀN THÀNH**
 
-The stability study checked whether an apparent communication effect could be
-explained only by repeated LLM sampling variability. For EC_001, every one of
-the six edges was evaluated with:
+Stability study kiểm tra liệu communication effect quan sát được có chỉ là do
+biến thiên khi sampling LLM hay không. Với EC_001, mỗi trong sáu edge được
+chạy:
 
 ~~~text
-10 WITH trials
-10 WITHOUT trials
+10 WITH trial
+10 WITHOUT trial
 ~~~
 
-This produced **120 recipient executions**. Fixed message hashes and
-observation fingerprints passed validation. The lowest modal action share was
-**0.80**, which was sufficient to proceed to a broader pilot while retaining
-the observed variability in the record.
+Tổng cộng có **120 recipient execution**. Message hash và observation
+fingerprint cố định đều vượt qua validation. Modal share thấp nhất là **0.80**;
+kết quả này đủ ổn định để chuyển sang pilot lớn hơn, đồng thời vẫn giữ lại
+biến thiên quan sát được trong artifact.
 
 ### Milestone 3 — Stratified six-case pilot
 
-**Status: COMPLETE**
+**Trạng thái: HOÀN THÀNH**
 
-The pilot used one representative case for each of the six root-cause classes:
+Pilot sử dụng một case đại diện cho mỗi trong sáu root-cause class:
 
 ~~~text
-6 cases × 6 communication edges × (5 WITH + 5 WITHOUT)
-= 360 recipient executions
+6 case × 6 communication edge × (5 WITH + 5 WITHOUT)
+= 360 recipient execution
 ~~~
 
-The pilot observed:
+Kết quả pilot quan sát được:
 
-| Observed utility effect | Count |
+| Observed utility effect | Số lượng |
 | --- | ---: |
 | Positive | 10 |
 | Zero | 24 |
 | Negative | 2 |
 
-Communication was therefore not universally useful in this pilot. Some messages
-helped, many did not change utility, and some reduced recipient correctness.
-This is pilot evidence, not a generalization claim.
+Communication vì vậy không phải lúc nào cũng hữu ích trong pilot. Một số
+message cải thiện quyết định, nhiều message không thay đổi utility, và một số
+message làm giảm độ đúng của recipient. Đây là pilot evidence, không phải kết
+luận về khả năng generalize.
 
 ### Milestone 4 — Counterfactual Message-Value Dataset v1
 
-**Status: COMPLETE**
+**Trạng thái: HOÀN THÀNH**
 
-Dataset v1 uses the full grounded case set, EC_001 through EC_050:
+Dataset v1 sử dụng toàn bộ grounded case từ EC_001 đến EC_050:
 
-| Root-cause class | Cases |
+| Root-cause class | Số case |
 | --- | ---: |
 | canceled_order_paid | 9 |
 | unavailable_order_paid | 9 |
@@ -294,56 +294,56 @@ Dataset v1 uses the full grounded case set, EC_001 through EC_050:
 | valid_split_payment | 8 |
 | unsupported_late_claim | 8 |
 
-Each case contributes six frozen directed candidate messages. Each message is
-evaluated with five WITH trials and five WITHOUT trials:
+Mỗi case đóng góp sáu frozen directed candidate message. Mỗi message được
+đánh giá bằng năm WITH trial và năm WITHOUT trial:
 
 ~~~text
-50 cases
-300 candidate messages
-3,000 recipient counterfactual trials
-300 aggregated message-value samples
+50 case
+300 candidate message
+3.000 recipient counterfactual trial
+300 aggregated message-value sample
 ~~~
 
-The final empirical utility-effect labels are:
+Phân bố utility-effect label thực nghiệm cuối cùng:
 
-| Label | Count |
+| Label | Số lượng |
 | --- | ---: |
 | POSITIVE | 74 |
 | ZERO | 209 |
 | NEGATIVE | 17 |
 
-These labels describe the observed utility effect
-delta_mean_utility. They are not predictions from V_hat. Across the dataset, the
-mean modal share was approximately **0.97** for both WITH and WITHOUT conditions.
+Các label này mô tả observed utility effect, tức delta_mean_utility. Chúng
+chưa phải dự đoán của V_hat. Mean modal share của cả điều kiện WITH và WITHOUT
+xấp xỉ **0.97**.
 
-## 8. One small example
+## 8. Một ví dụ nhỏ
 
-Consider the EC_001 edge Order/Seller -> Payment.
+Xét edge EC_001: Order/Seller -> Payment.
 
-- **WITHOUT message:** the Payment agent predicted valid_split_payment, which
-  was incorrect for the canceled_order_paid oracle case.
-- **WITH message:** the Order/Seller message included cancellation information,
-  and the Payment agent predicted canceled_order_paid, which was correct.
+- **WITHOUT message:** Payment agent dự đoán valid_split_payment, nhưng đây là
+  dự đoán sai vì oracle của case là canceled_order_paid.
+- **WITH message:** message của Order/Seller cung cấp thông tin order đã bị
+  hủy; Payment agent dự đoán canceled_order_paid và trở nên đúng.
 
-For this candidate message, the observed utility improved from 0 to 1. It is a
+Với candidate message này, utility quan sát được tăng từ 0 lên 1. Đây là một
 positive observed downstream effect.
 
-By contrast, on EC_001 the Payment -> Order/Seller recipient was already correct
-without the message and remained correct with it. That message had no utility
-improvement, although it still incurred communication cost. This is a redundant
-observed message under the current utility definition.
+Ngược lại, ở edge Payment -> Order/Seller của EC_001, recipient đã dự đoán
+đúng ngay cả khi không có message và vẫn đúng khi có message. Message không
+cải thiện utility, dù vẫn phát sinh communication cost. Đây là một message
+redundant theo utility hiện tại.
 
-## 9. What one Dataset v1 sample contains
+## 9. Một Dataset v1 sample chứa gì?
 
-Conceptually, one row represents one case, sender, recipient, and frozen
+Về mặt khái niệm, mỗi row biểu diễn một case, sender, recipient và frozen
 candidate message:
 
 ~~~text
 (case, sender, recipient, candidate message)
         |
-        +-- repeated WITHOUT outcomes
+        +-- các kết quả lặp lại WITHOUT
         |
-        +-- repeated WITH outcomes
+        +-- các kết quả lặp lại WITH
         |
         +-- delta_mean_utility
         |
@@ -351,28 +351,28 @@ candidate message:
         +-- repeated_mean_value
 ~~~
 
-The main aggregated artifact is:
+Artifact tổng hợp chính:
 
 ~~~text
 experiments/pvoc_v0/results/dataset_v1/
 pvoc_v1_20260922T205457Z_483f9ca0/dataset.jsonl
 ~~~
 
-The same run directory also contains frozen messages, raw recipient trials,
-case summaries, a manifest, and a summary file for reproducibility.
+Cùng run directory còn có frozen message, raw recipient trial,
+case summary, manifest và summary để phục vụ reproducibility.
 
-## 10. Progress against the proposal
+## 10. Tiến độ so với proposal
 
 ~~~mermaid
 flowchart TD
-    A[Research environment<br/>three grounded agents] --> B[Private information separation]
-    B --> C[Counterfactual SEND vs DROP apparatus]
+    A[Môi trường nghiên cứu<br/>ba grounded agent] --> B[Tách biệt private information]
+    B --> C[Bộ máy counterfactual SEND và DROP]
     C --> D[Stability / reliability validation]
     D --> E[Six-case pilot]
     E --> F[Counterfactual message-value dataset]
-    F --> G[Prospective V_hat estimator<br/>NEXT]
+    F --> G[Prospective V_hat estimator<br/>BƯỚC TIẾP THEO]
     G --> H[Selective communication policy]
-    H --> I[Baselines, budgets, ablations,<br/>generalization and final evaluation]
+    H --> I[Baselines, budget, ablation,<br/>generalization và final evaluation]
     classDef done fill:#dcfce7,stroke:#15803d,color:#14532d;
     classDef next fill:#fef3c7,stroke:#b45309,color:#78350f;
     classDef later fill:#f3f4f6,stroke:#6b7280,color:#374151;
@@ -381,26 +381,26 @@ flowchart TD
     class H,I later;
 ~~~
 
-The project has completed the measurement stage: it can estimate the true
-observed effect of a candidate message by running both counterfactual
-conditions. It has not completed the prospective prediction stage.
+Dự án đã hoàn tất giai đoạn đo lường: có thể đo observed effect thật của một
+candidate message bằng cách chạy cả hai điều kiện phản thực. Giai đoạn dự đoán
+prospective vẫn chưa hoàn tất.
 
-## 11. Current position in the research question
+## 11. Vị trí hiện tại trong câu hỏi nghiên cứu
 
-What exists now:
+Những gì hiện có:
 
 ~~~text
 candidate message
         |
-        +--> actually run WITH
+        +--> chạy thật ở điều kiện WITH
         |
-        +--> actually run WITHOUT
+        +--> chạy thật ở điều kiện WITHOUT
         |
         v
 observed counterfactual value
 ~~~
 
-What the research ultimately needs:
+Những gì nghiên cứu cuối cùng cần có:
 
 ~~~text
 candidate message
@@ -408,68 +408,69 @@ candidate message
         v
 prospective estimator V_hat
         |
-        +---- high predicted value ---> SEND
+        +---- predicted value cao ---> SEND
         |
-        +---- low predicted value ----> DROP
+        +---- predicted value thấp --> DROP
 ~~~
 
-V_hat has **not** been implemented. There is no production selective router or
-SEND/DROP policy yet.
+V_hat **chưa được triển khai**. Hiện chưa có production selective router hoặc
+SEND/DROP policy.
 
-## 12. Next steps
+## 12. Các bước tiếp theo
 
-The next stage is to define a leakage-safe prediction problem from Dataset v1.
-The intended order is:
+Bước tiếp theo là định nghĩa bài toán dự đoán không bị leakage từ Dataset v1.
+Thứ tự dự kiến:
 
-1. **Define legal pre-send features.** Features must be available to the sender
-   before communication. They must not contain downstream outcomes, oracle labels
-   unavailable at send time, WITH-condition results, or other future information.
-2. **Establish simple prospective-value baselines.** Possible baselines include
-   a heuristic, a simple supervised predictor, or an LLM-based value estimator.
-   The final method has not yet been selected.
-3. **Train and evaluate V_hat.** The target is to predict observed message value
-   before message transmission.
-4. **Turn prediction into selective communication.** A future policy could send
-   when V_hat(m) > threshold and otherwise drop the message.
-5. **Compare against communication baselines:** full communication, no
-   communication, random or budgeted communication, and existing merge-late
-   behavior where appropriate.
-6. **Evaluate trade-offs:** task correctness, message count, tokens, latency,
-   communication cost, and performance retained under communication budgets.
-7. **Later, test ablations and generalization** across recipients, root-cause
-   types, team configurations, and—if resources permit—other models or tasks.
+1. **Xác định pre-send feature hợp lệ.** Feature phải có sẵn với sender trước
+   khi communication xảy ra. Feature không được chứa downstream outcome, oracle
+   label không có sẵn tại thời điểm gửi, kết quả của WITH condition hoặc thông
+   tin tương lai khác.
+2. **Thiết lập baseline prospective đơn giản.** Có thể xem xét heuristic,
+   supervised predictor đơn giản hoặc LLM-based value estimator. Phương pháp
+   cuối cùng chưa được chọn.
+3. **Train và evaluate V_hat.** Mục tiêu là dự đoán observed message value
+   trước khi message được truyền.
+4. **Chuyển dự đoán thành selective communication.** Policy tương lai có thể
+   gửi khi V_hat(m) > threshold và DROP trong trường hợp ngược lại.
+5. **So sánh với communication baseline:** full communication, no
+   communication, random hoặc budgeted communication, và existing merge-late
+   behavior nếu phù hợp.
+6. **Đánh giá trade-off:** task correctness, số message, token, latency,
+   communication cost và mức performance được giữ lại dưới các budget khác nhau.
+7. **Về sau, đánh giá ablation và generalization** trên recipient, root-cause
+   type, team configuration và — nếu đủ tài nguyên — model hoặc task khác.
 
-None of these prospective-estimation or selective-routing steps has been
-claimed as completed.
+Chưa có bước prospective estimation hoặc selective routing nào được tuyên bố
+là đã hoàn thành.
 
-## 13. Research-focused repository map
+## 13. Bản đồ repository dành cho nghiên cứu
 
 ~~~text
 multiAgent_research/
 |
 |-- experiments/pvoc_v0/
-|   |-- core/          # shared research primitives
+|   |-- core/          # research primitive dùng chung
 |   |-- studies/       # smoke, stability, pilot, Dataset v1
-|   |-- results/       # frozen experiment artifacts
-|   |-- cli.py         # unified study entry point
+|   |-- results/       # experiment artifact đã freeze
+|   |-- cli.py         # entry point thống nhất
 |
-|-- data/input/        # grounded EC case inputs
-|-- src/               # original Olist application/environment
-|-- tests/experiments/ # research tests
+|-- data/input/        # grounded EC case input
+|-- src/               # ứng dụng Olist và experimental environment ban đầu
+|-- tests/experiments/ # research test
 ~~~
 
-A supervisor interested in the research should start at
-[experiments/pvoc_v0/](experiments/pvoc_v0/). The internal README there
-contains technical run commands and artifact details; this root README explains
-the research progression and current position.
+Supervisor quan tâm đến research nên bắt đầu từ
+[experiments/pvoc_v0/](experiments/pvoc_v0/). README bên trong thư mục này
+chứa technical run command và artifact detail; root README này tập trung giải
+thích research story và tiến độ hiện tại.
 
-## Research boundaries
+## Ranh giới nghiên cứu hiện tại
 
-- Dataset v1 is an observed-value dataset, not a learned value estimator.
-- Current utility is binary correctness against the deterministic oracle.
-- The experiments use one grounded Olist environment and do not establish
-  generalization beyond it.
-- No learned V_hat estimator exists yet.
-- No production selective communication router exists yet.
-- The current work does not claim causal proof or a completed selective
-  communication policy.
+- Dataset v1 là observed-value dataset, chưa phải learned value estimator.
+- Utility hiện tại là binary correctness so với deterministic oracle.
+- Các thí nghiệm mới được thực hiện trong một Olist experimental environment;
+  chưa có kết luận về generalization sang môi trường khác.
+- Chưa có learned V_hat estimator.
+- Chưa có production selective communication router.
+- Chưa có kết luận causal proof hoặc selective communication policy hoàn chỉnh.
+
