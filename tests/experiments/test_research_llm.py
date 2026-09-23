@@ -3,11 +3,11 @@ from types import SimpleNamespace
 import pytest
 from openai import LengthFinishReasonError
 
-from experiments.pvoc_v0.research_llm import (
+from experiments.pvoc_v0.core.llm import (
     ResearchStructuredLLMError,
     ResearchVertexStructuredLLM,
 )
-from experiments.pvoc_v0.schemas import DecisionResponse
+from experiments.pvoc_v0.core.schemas import DecisionResponse
 
 
 class FakeSettings:

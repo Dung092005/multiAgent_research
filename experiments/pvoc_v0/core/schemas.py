@@ -1,4 +1,4 @@
-"""Strict, research-only contracts for the PVoC v0 study."""
+"""Strict, research-only contracts shared by all PVoC studies."""
 
 from datetime import datetime
 from decimal import Decimal
@@ -290,3 +290,9 @@ class DatasetV1DatasetSample(StrictModel):
     effect_label: DatasetV1EffectLabel
     action_changed: bool
     accuracy_changed: bool
+
+    @property
+    def utility_effect_label(self) -> DatasetV1EffectLabel:
+        """Explicit code-facing name for the frozen artifact's ``effect_label`` field."""
+
+        return self.effect_label

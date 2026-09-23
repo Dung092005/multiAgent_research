@@ -2,9 +2,13 @@ from decimal import Decimal
 
 import pytest
 
-from experiments.pvoc_v0.observations import observation_fingerprint
-from experiments.pvoc_v0.schemas import CandidateMessage, PaymentObservation, StabilityTrialRecord
-from experiments.pvoc_v0.stability_runner import (
+from experiments.pvoc_v0.core.protocol import observation_fingerprint
+from experiments.pvoc_v0.core.schemas import (
+    CandidateMessage,
+    PaymentObservation,
+    StabilityTrialRecord,
+)
+from experiments.pvoc_v0.studies.stability import (
     N_TRIALS,
     candidate_message_content_hash,
     candidate_message_id,

@@ -1,87 +1,129 @@
-# PVoC v0: private-observation counterfactual communication
+# PVoC research harness
 
-This is a research-only experimental harness for a controlled three-agent
-communication study. It is isolated from the production Olist dispute graph:
-it does not import, invoke, or change `src.graph`.
+This folder is an isolated research harness for counterfactual communication in
+the Olist dispute environment. It reuses read-only data tools and the
+deterministic `EC_POLICY_V1` oracle, but it does not invoke or modify the
+production graph or production agents.
 
-## Study design
+## Experiment in one picture
 
-The harness reuses the existing read-only Olist repository and specialist
-tools to construct three private observations for each EC case:
-
-- `order_seller_agent`: order, item, and seller evidence only.
-- `payment_agent`: payment rows and payment aggregate only.
-- `delivery_agent`: delivery timeline, shipping limits, and review count only.
-
-Each agent returns a structured recipient decision:
-
-```json
-{
-  "predicted_root_cause": "late_delivery_logistics",
-  "confidence": 0.84,
-  "short_reason": "Carrier hand-off and final delivery occurred after the estimate."
-}
+```text
+grounded Olist case
+        |
+        +-- order/seller private observation --> order_seller_agent
+        +-- payment private observation ------> payment_agent
+        +-- delivery private observation -----> delivery_agent
+                                                     |
+                           3 agents x 2 recipients = 6 directed messages
+                                                     |
+                         same recipient observation, WITH vs WITHOUT message
+                                                     |
+                       oracle accuracy, cost, and counterfactual value records
 ```
 
-The root-cause space is fixed to the six `EC_POLICY_V1` issue codes. The
-existing deterministic `PolicyEngine` is the sole ground-truth oracle.
+The recipient never receives the oracle, global state, or the sender's private
+observation. The only intended branch difference is whether the frozen
+`CandidateMessage` is present. Observation fingerprints enforce this invariant.
 
-For every directed pair of the three agents, the runner builds one
-`CandidateMessage` and evaluates the same recipient observation twice:
+## Folder map
 
-1. `deliver(message)`: the recipient receives its private observation plus the
-   message.
-2. `drop(message)`: the recipient receives the same private observation with
-   no message.
+```text
+pvoc_v0/
+|-- README.md                 # start here
+|-- cli.py                    # one CLI for every milestone
+|-- core/
+|   |-- schemas.py            # research-only Pydantic contracts
+|   |-- protocol.py           # observations, agents, messages, metrics, hashes
+|   |-- llm.py                # research-only Vertex structured-output adapter
+|   `-- io.py                 # JSON/JSONL and checksum helpers
+|-- studies/
+|   |-- smoke.py              # original EC_001 paired run
+|   |-- stability.py          # repeated EC_001 recipient decisions
+|   |-- pilot.py              # six-case stratified pilot
+|   |-- dataset_v1.py         # dataset orchestration
+|   |-- dataset_v1_records.py # validation and aggregation
+|   `-- dataset_v1_store.py   # checkpoint/resume and finalization
+|-- *_runner.py               # tiny compatibility entry points only
+`-- results/                  # frozen historical artifacts
+```
 
-The runner checks an observation fingerprint to ensure the only intended
-difference is message delivery. It writes one JSONL record per candidate
-message with actions, oracle action, immediate/terminal utilities, token use,
-latency, communication cost, and:
+## Completed milestones
 
-`V_star = U_with - U_without - lambda * communication_cost`
+1. **Smoke test** — one EC_001 run, six directed pairs, one paired
+   WITH/WITHOUT evaluation per message.
+2. **Stability test** — EC_001, 10 trials per condition, 120 recipient calls,
+   fixed messages and fingerprints.
+3. **Six-case pilot** — one case per root-cause class, 36 messages and 360
+   recipient trials.
+4. **Dataset v1** — **COMPLETE**: EC_001 through EC_050, 50 cases, 300 frozen
+   messages, 3,000 raw trials, and 300 aggregated samples.
 
-`immediate_utility` and `terminal_utility` are both one-step oracle accuracy in
-v0. This is deliberately simple; there is no learned value estimator,
-entropy/MI/JS computation, or production-flow integration.
+The final frozen dataset is:
 
-## Prerequisites
+```text
+experiments/pvoc_v0/results/dataset_v1/
+pvoc_v1_20260922T205457Z_483f9ca0/
+```
 
-Use the project's existing local configuration and input data:
+Its validated utility-effect distribution is 74 POSITIVE, 209 ZERO, and 17
+NEGATIVE samples. These are empirical dataset labels, not a generalization
+claim.
 
-- `.env` must contain the existing Neon/Postgres configuration and Vertex AI
-  credentials expected by the project.
-- `data/input` must contain validated `EC_001.json` through `EC_035.json` for
-  the full study.
-- The configured database must contain the Olist records referenced by those
-  cases.
+## Unified commands
 
-The runner validates model configuration and opens the database in read-only
-mode. It sends research decisions to the same configured Vertex-backed LLM
-client used by the project; it does not call the production graph.
-
-## Exact run command
-
-From the repository root, run the 35-case study with:
+Run from the repository root with the existing virtual environment:
 
 ```powershell
-.\.venv\Scripts\python.exe -m experiments.pvoc_v0.runner --input-dir data/input --results-dir experiments/pvoc_v0/results --lambda-cost 0.001
+..venv\Scripts\python.exe -m experiments.pvoc_v0.cli smoke --case-id EC_001
+..venv\Scripts\python.exe -m experiments.pvoc_v0.cli stability
+..venv\Scripts\python.exe -m experiments.pvoc_v0.cli pilot
+..venv\Scripts\python.exe -m experiments.pvoc_v0.cli dataset-v1
+..venv\Scripts\python.exe -m experiments.pvoc_v0.cli dataset-v1 --resume <run_dir>
 ```
 
-To execute one controlled case during development:
+Use `--help` after a study name for its options. Historical `*_runner.py`
+module paths remain as small compatibility wrappers; new work should use
+`cli.py`.
+
+Research-only tests and lint:
 
 ```powershell
-.\.venv\Scripts\python.exe -m experiments.pvoc_v0.runner --case-id EC_001
+..venv\Scripts\python.exe -m pytest tests/experiments -q
+..venv\Scripts\python.exe -m ruff check experiments/pvoc_v0 tests/experiments
 ```
 
-Each run creates a timestamped `.jsonl` file and matching `.manifest.json` in
-`experiments/pvoc_v0/results/`. The manifest records the case IDs, lambda, and
-oracle identity for reproducibility.
+## Metric names
 
-## Tests
+The original paired study keeps:
 
-Run the isolated harness tests with:
-
-```powershell
-.\.venv\Scripts\python.exe -m pytest tests/experiments/test_pvoc_v0.py -q
+```text
+V_star = U_with - U_without - lambda * communication_cost
 ```
+
+Repeated studies and Dataset v1 keep:
+
+```text
+delta_mean_utility = mean_U_with - mean_U_without
+repeated_mean_value = delta_mean_utility - lambda * communication_cost
+```
+
+The frozen Dataset v1 field `effect_label` is specifically the sign of
+`delta_mean_utility`; it is therefore a **utility-effect label**. It is not the
+sign of `repeated_mean_value`. New code exposes the clearer
+`utility_effect_label` property and the pure helper
+`value_sign_label(repeated_mean_value)` without rewriting frozen artifacts.
+
+## Provenance note: resume_count
+
+The implementation log records that the final run was explicitly resumed after
+a bounded Vertex `LengthFinishReasonError` at EC_026, and the resume path cleaned
+the incomplete case before completion. The frozen final manifest nevertheless
+contains `resume_count = 0`. Audit found that the old runner initialized this
+field but never incremented it. Future runs now increment the field after a
+resume manifest passes compatibility validation. The frozen manifest is left
+unchanged, so this note documents the confirmed bookkeeping inconsistency.
+
+## Scope boundary
+
+No `V_hat` estimator exists yet. There is no learned router, SEND/DROP policy,
+entropy, mutual information, or Jensen-Shannon metric in this harness.

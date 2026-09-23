@@ -5,37 +5,41 @@ from pathlib import Path
 
 import pytest
 
-from experiments.pvoc_v0.dataset_v1_runner import (
+from experiments.pvoc_v0.core.io import append_jsonl, atomic_write_json, read_jsonl
+from experiments.pvoc_v0.core.protocol import (
+    candidate_message_content_hash,
+    candidate_message_id,
+    condition_order,
+    directed_pairs,
+)
+from experiments.pvoc_v0.core.schemas import (
+    CandidateMessage,
+    DatasetV1MessageRecord,
+    DatasetV1TrialRecord,
+    RootCauseCode,
+)
+from experiments.pvoc_v0.studies.dataset_v1_records import (
     ALL_CASE_IDS,
     DATASET_V1_CONFIG_ID,
     EXPECTED_ROOT_CAUSE_DISTRIBUTION,
     LAMBDA_COST,
     N_TRIALS_PER_CONDITION,
     DatasetV1ValidationError,
-    _artifact_paths,
-    append_jsonl,
-    atomic_write_json,
     build_dataset_sample,
     build_dataset_summary,
-    candidate_message_content_hash,
-    candidate_message_id,
-    condition_order,
-    create_run_directory,
-    directed_pairs,
     effect_label,
     expected_counts,
-    inspect_and_clean_resume_state,
-    load_manifest,
-    read_jsonl,
-    update_manifest,
     validate_case_records,
     validate_oracle_distribution,
 )
-from experiments.pvoc_v0.schemas import (
-    CandidateMessage,
-    DatasetV1MessageRecord,
-    DatasetV1TrialRecord,
-    RootCauseCode,
+from experiments.pvoc_v0.studies.dataset_v1_store import artifact_paths as _artifact_paths
+from experiments.pvoc_v0.studies.dataset_v1_store import (
+    create_run_directory,
+    inspect_and_clean_resume_state,
+    load_manifest,
+    record_resume,
+    update_manifest,
+    validate_completed_run_read_only,
 )
 
 RUN_ID = "dataset-v1-test"
@@ -351,8 +355,15 @@ def test_resume_methodology_or_config_mismatch_stops(tmp_path: Path) -> None:
     assert DATASET_V1_CONFIG_ID != "different-config"
 
 
+def test_record_resume_increments_future_manifest_metadata(tmp_path: Path) -> None:
+    run_dir, manifest = create_run_directory(tmp_path, ("EC_001",))
+    record_resume(run_dir, manifest)
+    persisted = _artifact_paths(run_dir)["manifest"].read_text(encoding="utf-8")
+    assert '"resume_count": 1' in persisted
+
+
 def test_final_invariant_validation_completes_full_fake_dataset(tmp_path: Path) -> None:
-    from experiments.pvoc_v0.dataset_v1_runner import finalize_run
+    from experiments.pvoc_v0.studies.dataset_v1_store import finalize_run
 
     run_dir, manifest = create_run_directory(tmp_path, ALL_CASE_IDS)
     oracles = all_oracles()
@@ -383,3 +394,4 @@ def test_final_invariant_validation_completes_full_fake_dataset(tmp_path: Path) 
     }
     assert len(paths["dataset"].read_text(encoding="utf-8").splitlines()) == 300
     assert manifest["sanity_checks"]["six_root_cause_classes"] is True
+    assert validate_completed_run_read_only(run_dir)["unique_trial_keys"] is True

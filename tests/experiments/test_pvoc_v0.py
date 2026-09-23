@@ -3,10 +3,16 @@ from decimal import Decimal
 
 import pytest
 
-from experiments.pvoc_v0.counterfactual import CounterfactualRunner
-from experiments.pvoc_v0.metrics import communication_cost, immediate_utility, v_star
-from experiments.pvoc_v0.observations import PrivateObservationBuilder, observation_fingerprint
-from experiments.pvoc_v0.schemas import (
+from experiments.pvoc_v0.core.protocol import (
+    CounterfactualRunner,
+    PrivateObservationBuilder,
+    communication_cost,
+    immediate_utility,
+    observation_fingerprint,
+    v_star,
+    value_sign_label,
+)
+from experiments.pvoc_v0.core.schemas import (
     CandidateMessage,
     DecisionExecution,
     PaymentObservation,
@@ -184,3 +190,9 @@ def test_metric_calculation_uses_oracle_accuracy_and_message_cost() -> None:
     assert immediate_utility("valid_split_payment", "valid_split_payment") == 1.0
     assert immediate_utility("valid_split_payment", "unsupported_late_claim") == 0.0
     assert v_star(1.0, 0.0, 0.25, cost) == pytest.approx(-0.5)
+
+
+def test_value_sign_label_is_explicitly_cost_adjusted() -> None:
+    assert value_sign_label(0.2) == "POSITIVE"
+    assert value_sign_label(0.0) == "ZERO"
+    assert value_sign_label(-0.01) == "NEGATIVE"

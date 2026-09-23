@@ -1,4 +1,4 @@
-"""Vertex structured-output client used only by the PVoC v0 experiment."""
+"""Vertex structured-output client used only by the PVoC studies."""
 
 from __future__ import annotations
 

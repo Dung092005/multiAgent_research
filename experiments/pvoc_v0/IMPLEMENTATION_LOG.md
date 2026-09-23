@@ -83,3 +83,19 @@ Final artifacts are under
 `experiments/pvoc_v0/results/dataset_v1/pvoc_v1_20260922T205457Z_483f9ca0/`.
 The research test suite passed with 34 tests and Ruff passed for the research
 module and its tests.
+
+## Code-organization cleanup (2026-09-23)
+
+The frozen research artifacts were checksummed before this refactor. Shared
+schemas, protocol operations, structured-LLM handling, and artifact I/O now
+live under `core/`; milestone orchestration lives under `studies/`; and
+`cli.py` is the single documented entry point. Historical runner module names
+remain only as compatibility delegates. No experiment artifact or methodology
+was rewritten.
+
+The cleanup audit confirmed a metadata bug in the old resume path: it loaded,
+validated, and resumed a run without incrementing `resume_count`. The final
+dataset was explicitly resumed after the EC_026 interruption, but its frozen
+manifest therefore reports `resume_count = 0`. Future resumes increment the
+counter after manifest compatibility validation. The existing manifest remains
+unchanged to preserve artifact checksums.
