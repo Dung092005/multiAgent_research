@@ -1,422 +1,475 @@
-<div align="center">
+# Value-Aware Selective Communication in LLM Multi-Agent Systems
 
-# Olist Dispute Desk
+Experimental study of prospective message value using controlled counterfactual
+communication between specialized LLM agents.
 
-### Multi-agent e-commerce dispute investigation
+## Current research status — September 2026
 
-*Agents investigate order · payment · delivery evidence from PostgreSQL — a deterministic policy engine computes refunds in code, and a verifier signs off before anything reaches the UI.*
-
-<br/>
-
-[![Python](https://img.shields.io/badge/Python-3.11%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
-[![FastAPI](https://img.shields.io/badge/FastAPI-Backend-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
-[![React](https://img.shields.io/badge/React-Vite-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://vitejs.dev/)
-[![LangGraph](https://img.shields.io/badge/LangGraph-Multi--Agent-1C3C3C?style=for-the-badge)](https://langchain-ai.github.io/langgraph/)
-[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
-[![OpenRouter](https://img.shields.io/badge/OpenRouter-GPT--5--Nano-000000?style=for-the-badge&logo=openai&logoColor=white)](https://openrouter.ai/openai/gpt-5-nano)
-
-<br/>
-
-**[Features](#features) · [Architecture](#architecture) · [Tech stack](#tech-stack) · [Policy](#policy-ec_policy_v1) · [Quick start](#quick-start) · [API](#api-surface-mvp) · [Design](#design-principles)**
-
-</div>
-
----
-
-## What is this?
-
-> **Customer claims are not trusted by default.** A support agent opens a case against an Olist `order_id`; a supervisor **Coordinator** dispatches three specialist agents (Order/Seller, Payment, Delivery) that read only *facts* from PostgreSQL. Their findings land on a shared **Evidence Board**, a **deterministic policy engine** decides the refund, and a **Verifier** gates the result — so the money math is auditable and the LLM never invents data.
-
----
-
-## Features
-
-| | |
+| Research component | Status |
 | --- | --- |
-| **Dispute Desk UI** | Create cases from live Olist orders, run investigations, review evidence, approve / reject |
-| **Multi-agent pipeline** | Coordinator + Order/Seller, Payment, Delivery specialists running in parallel |
-| **Deterministic policy** | Refunds and actions come from `EC_POLICY_V1` code — never LLM arithmetic |
-| **Grounded evidence IDs** | Only IDs that resolve to real PostgreSQL records make it to output |
-| **Run history** | Snapshots stored in `dispute_desk.*` tables (timeline, reports, final JSON) |
-| **Batch mode** | Optional `input/EC_001.json … EC_050.json` via the CLI runner |
+| Three-agent research environment | **COMPLETE** |
+| Private-information separation | **COMPLETE** |
+| Counterfactual WITH vs WITHOUT apparatus | **COMPLETE** |
+| Reliability / stability validation | **COMPLETE** |
+| Six-class stratified pilot | **COMPLETE** |
+| 50-case Counterfactual Message-Value Dataset v1 | **COMPLETE** |
+| Prospective value estimator V_hat | **NOT YET IMPLEMENTED** |
 
----
+Dataset v1 currently contains:
 
-## Architecture
+~~~text
+50 cases · 300 candidate messages · 3,000 recipient trials · 300 aggregated samples
+~~~
 
-### System overview
+This repository is now primarily a research implementation and experimental
+testbed. The original Olist dispute application is the environment from which
+the research setup was constructed.
 
-Layout mirrors the end-to-end investigation pipeline: ingest → multi-agent graph → verified JSON output.
+## 1. Research context
 
-```mermaid
-flowchart LR
-    subgraph Inputs["Input data sources"]
-        CSV["data/*.csv<br/>Olist dataset"]
-        CASES["input/EC_001…EC_050.json<br/>investigation cases"]
-        UI["Dispute Desk UI<br/>React · Vite"]
-    end
+In a multi-agent system, agents can communicate or merge information without
+knowing whether a particular message will improve another agent's future
+decision. This project studies the question:
 
-    subgraph External["External services"]
-        OR["OpenRouter<br/>openai/gpt-5-nano"]
-        LF["Langfuse<br/>traces & metrics"]
-    end
+> Can an agent estimate whether a candidate message is worth sending before it
+> is transmitted?
 
-    subgraph Host["App runtime · Docker Compose + local services"]
-        direction TB
-        INGEST["CSV ingest<br/>scripts/import_olist_csv.py"]
-        INTAKE["Case intake<br/>API / batch runner"]
-        PG[("PostgreSQL 16<br/>olist.* · dispute_desk.*")]
+The current work measures message value empirically through controlled
+counterfactual trials. The prospective estimator that would predict this value
+before transmission is the next research stage; it does not exist yet.
 
-        subgraph LG["LangGraph application"]
-            direction TB
-            COORD["Coordinator<br/>triage & dispatch"]
-            DEL["Delivery Agent"]
-            PAY["Payment Agent"]
-            ORD["Order & Seller Agent"]
-            MERGE["Merge evidence<br/>Evidence Board"]
-            POL["Policy Agent<br/>+ deterministic EC_POLICY_V1"]
-            VER["Verifier Agent"]
-            FIX["Limited repair<br/>≤1 retry"]
-            OUTN["Write output"]
-        end
+## 2. What I started with
 
-        ENV[".env / config<br/>DATABASE_URL · API keys"]
-    end
+Before the research work, I had a working e-commerce dispute investigation
+system built around the public Brazilian Olist dataset. A customer dispute was
+investigated by three specialized agents, whose findings were combined and
+checked by deterministic code.
 
-    OUTF["output/EC_NNN.json<br/>+ Desk UI snapshot"]
+The original high-level system was:
 
-    CSV --> INGEST --> PG
-    CASES --> INTAKE
-    UI --> INTAKE
-    INTAKE --> COORD
+~~~text
+Customer dispute
+        |
+        v
+   Coordinator
+        |
+        +------------------+------------------+
+        |                  |                  |
+        v                  v                  v
+ Order/Seller Agent    Payment Agent      Delivery Agent
+        |                  |                  |
+        +------------------+------------------+
+                           |
+                           v
+                     Evidence Board
+                           |
+                           v
+                      PolicyEngine
+                           |
+                           v
+                        Verifier
+                           |
+                           v
+                      Final result
+~~~
 
-    COORD --> DEL
-    COORD --> PAY
-    COORD --> ORD
-    DEL --> PG
-    PAY --> PG
-    ORD --> PG
-    DEL --> MERGE
-    PAY --> MERGE
-    ORD --> MERGE
-    MERGE --> POL --> VER
-    VER -->|valid| OUTN
-    VER -->|invalid| FIX
-    FIX --> VER
-    OUTN --> OUTF
+The three specialists had distinct evidence responsibilities:
 
-    OR -.->|model call| COORD
-    OR -.->|model call| DEL
-    OR -.->|model call| PAY
-    OR -.->|model call| ORD
-    OR -.->|model call| POL
-    OR -.->|model call| VER
-    OR -.->|model call| FIX
-    LG -.->|trace| LF
-    ENV -.-> Host
-
-    classDef ext fill:#f5f5f5,stroke:#525252,color:#171717;
-    classDef data fill:#dbeafe,stroke:#1d4ed8,color:#1e3a8a;
-    classDef agent fill:#e0f2f1,stroke:#0f766e,color:#0b3d39;
-    classDef gate fill:#ede9fe,stroke:#6d28d9,color:#3b0764;
-    classDef det fill:#fef3c7,stroke:#b45309,color:#7c2d12;
-    class OR,LF,ENV ext;
-    class CSV,CASES,PG,OUTF data;
-    class DEL,PAY,ORD,MERGE,COORD agent;
-    class VER,FIX,INTAKE,INGEST,UI gate;
-    class POL,OUTN det;
-```
-
-### Multi-agent investigation flow
-
-```mermaid
-flowchart LR
-    A([Case Intake]) --> B{{Coordinator<br/>Triage}}
-    B --> C[Order & Seller]
-    B --> D[Payment]
-    B --> E[Delivery]
-    C --> F[[Evidence Board]]
-    D --> F
-    E --> F
-    F --> G[/Policy Engine<br/>deterministic/]
-    G --> H{Verifier}
-    H -->|pass| I([Persist + UI Output])
-    H -->|fail · ≤1 repair| J[Targeted Repair]
-    J --> H
-
-    classDef intake fill:#0f766e,stroke:#0b4f48,color:#fff;
-    classDef spec fill:#e0f2f1,stroke:#0f766e,color:#0b3d39;
-    classDef det fill:#fef3c7,stroke:#b45309,color:#7c2d12;
-    classDef gate fill:#ede9fe,stroke:#6d28d9,color:#3b0764;
-    class A,I intake;
-    class C,D,E,F spec;
-    class G det;
-    class B,H,J gate;
-```
-
-### Deployment (local Docker + services)
-
-```mermaid
-flowchart LR
-    subgraph Host["Developer Machine"]
-        direction TB
-        FE["Vite Dev Server<br/>:5173"]
-        BE["FastAPI · Uvicorn<br/>:8000"]
-        subgraph DC["Docker Compose"]
-            PGC[("PostgreSQL 16<br/>:5432")]
-        end
-    end
-
-    subgraph Cloud["External APIs"]
-        ORC["OpenRouter<br/>openai/gpt-5-nano"]
-        LFC["Langfuse<br/>(optional)"]
-    end
-
-    FE -->|REST /api| BE
-    BE -->|SQLAlchemy async| PGC
-    BE -->|structured JSON| ORC
-    BE -.->|traces| LFC
-    CSVF["data/*.csv"] -->|ingest once| PGC
-
-    classDef svc fill:#e0f2f1,stroke:#0f766e,color:#0b3d39;
-    classDef db fill:#dbeafe,stroke:#1d4ed8,color:#1e3a8a;
-    classDef ext fill:#f5f5f5,stroke:#525252,color:#171717;
-    class FE,BE svc;
-    class PGC,CSVF db;
-    class ORC,LFC ext;
-```
-
-### Data model (persistence)
-
-```mermaid
-erDiagram
-    ORDERS ||--o{ ORDER_ITEMS : contains
-    ORDERS ||--o{ ORDER_PAYMENTS : paid_by
-    ORDERS ||--o{ ORDER_REVIEWS : reviewed_by
-    ORDER_ITEMS }o--|| SELLERS : sold_by
-    CASES ||--o{ INVESTIGATION_RUNS : has
-
-    ORDERS {
-        string order_id PK
-        string order_status
-        timestamp delivered_customer_date
-        timestamp estimated_delivery_date
-    }
-    ORDER_ITEMS {
-        string order_id FK
-        int order_item_id
-        string seller_id FK
-        timestamp shipping_limit_date
-        numeric price
-        numeric freight_value
-    }
-    CASES {
-        string case_id PK
-        string order_id
-        string decision
-    }
-    INVESTIGATION_RUNS {
-        uuid run_id PK
-        string case_id FK
-        string status
-        jsonb final_output
-        jsonb timeline
-    }
-```
-
-`olist.*` = read-only source of record. `dispute_desk.*` = app state written by the API.
-
-### Verification state machine
-
-```mermaid
-stateDiagram-v2
-    [*] --> Running
-    Running --> Verifying: agents + policy done
-    Verifying --> Completed: schema · evidence · finance OK
-    Verifying --> Repairing: recoverable error (≤1)
-    Repairing --> Verifying
-    Verifying --> Failed: unrecoverable / retry exhausted
-    Completed --> [*]
-    Failed --> [*]
-```
-
-### What the LLM may vs may not do
-
-| Allowed (LLM) | Forbidden (LLM) |
+| Specialist | Evidence used |
 | --- | --- |
-| Understand customer claim / intent | Invent orders, payments, tracking events |
-| Write short investigation narratives | Run arbitrary SQL |
-| Soft review of policy wording | Compute refunds or money totals |
-| Compact structured JSON responses | Override deterministic policy results |
+| Order/Seller Agent | Order status, order items, and seller evidence |
+| Payment Agent | Payment records, totals, and payment structure |
+| Delivery Agent | Delivery timeline and shipping deadlines |
 
-PostgreSQL is the **system of record**. Money, timestamps, and refund decisions are **code-owned**.
+The deterministic PolicyEngine already defined six root-cause classes:
 
----
+1. canceled_order_paid
+2. unavailable_order_paid
+3. late_delivery_seller
+4. late_delivery_logistics
+5. valid_split_payment
+6. unsupported_late_claim
 
-## Tech stack
+Because these decisions were defined in deterministic code, PolicyEngine could
+later serve as the experimental oracle / ground truth. The original application
+is therefore useful as a grounded environment, while the research question is
+evaluated in a separate harness.
 
-| Layer | Choice |
-| --- | --- |
-| Frontend | React, Vite, TypeScript |
-| Backend API | FastAPI, Uvicorn |
-| Orchestration | LangGraph |
-| LLM gateway | OpenRouter → `openai/gpt-5-nano` |
-| Database | PostgreSQL 16 + SQLAlchemy async / psycopg |
-| Infra local | Docker Compose |
-| Observability | Local `trace.jsonl` + optional Langfuse |
-| Config | `.env` for secrets · model slug in source (`src/config/model_config.py`) |
+## 3. From application to research testbed
 
----
+The original system was designed to complete an investigation. It did not
+measure the value of an individual inter-agent message. To turn it into a
+controlled communication experiment, I added the isolated research harness in
+[experiments/pvoc_v0/](experiments/pvoc_v0/).
 
-## Policy (`EC_POLICY_V1`)
+~~~text
+Existing Olist application
+        =
+grounded research environment
 
-Priority order. Money rounded to 2 decimals. Payment match tolerance **±0.10 BRL**.
+PVoC v0 harness
+        =
+controlled experimental apparatus for measuring message value
+~~~
 
-| Primary issue | Condition | Responsible party | Refund | Action |
-| --- | --- | --- | ---: | --- |
-| `canceled_order_paid` | `canceled` + payment > 0 | `platform` | payment total | `issue_full_refund` |
-| `unavailable_order_paid` | `unavailable` + payment > 0 | `platform` | payment total | `issue_full_refund` |
-| `late_delivery_seller` | delivered late + carrier after `shipping_limit_date` | `seller` | freight | `refund_freight` |
-| `late_delivery_logistics` | delivered late + carrier on time | `logistics_provider` | freight | `refund_freight` |
-| `valid_split_payment` | ≥2 payments, totals reconcile | — | 0 | `explain_valid_split_payment` |
-| `unsupported_late_claim` | not late + payment OK | — | 0 | `reject_late_refund` |
+The production application is not itself the research contribution. It provides
+realistic cases, specialist evidence, existing agent roles, and the deterministic
+oracle. The PVoC harness defines the private observations, frozen candidate
+messages, counterfactual branches, and measurements needed to study communication
+value.
 
-### Evidence ID contract
+## 4. Research testbed
 
-```text
-order:<order_id>
-item:<order_id>:<order_item_id>
-payment:<order_id>:<payment_sequential>
-seller:<seller_id>
-policy:<root_cause_code>
-```
+For each grounded case, the harness constructs three private observations. Each
+agent makes decisions from its own observation, and a sender can construct a
+candidate message for one recipient.
 
----
+~~~text
+Olist case
+   |
+   +-------------------+-------------------+
+   |                   |                   |
+   v                   v                   v
+Order/Seller        Payment            Delivery
+private view        private view       private view
+   |                   |                   |
+   v                   v                   v
+Agent A             Agent B            Agent C
+   \                   |                   /
+    +-------- candidate message --------+
+                         |
+                         v
+                 WITH vs WITHOUT trial
+~~~
 
-## Project structure
+For every directed sender-recipient pair, the experiment is:
 
-```text
-├── frontend/                  # Dispute Desk (React + Vite)
-├── src/
-│   ├── api/                   # FastAPI surface
-│   ├── agents/                # Coordinator + specialists + policy + verifier
-│   ├── graph.py               # LangGraph wiring
-│   ├── policy/                # Deterministic EC_POLICY_V1
-│   ├── finance/               # Money calculator
-│   ├── database/              # Models, repository, schema
-│   ├── tools/                 # Allowlisted DB tools
-│   ├── verification/          # Schema / evidence / financial checks
-│   ├── llm/                   # OpenRouter client
-│   └── observability/         # Trace + metadata
-├── scripts/                   # ingest, run_api, validate, smoke
-├── config/                    # policy + model registry
-├── input/                     # EC_001 … EC_050 case JSON
-├── data/                      # Olist CSV (not committed if large)
-├── logging/                   # traces / metadata
-└── architecture.md            # Deep design notes
-```
+~~~mermaid
+flowchart TD
+    S[Sender decision] --> M[Candidate message m]
+    M --> W[DELIVER m]
+    M --> X[DROP m]
+    W --> SW[Same recipient private observation<br/>+ message]
+    X --> SX[Same recipient private observation<br/>+ no message]
+    SW --> DW[Decision WITH]
+    SX --> DX[Decision WITHOUT]
+    DW --> C[Compare utility<br/>after both decisions exist]
+    DX --> C
+    C --> V[Observed message value]
+~~~
 
----
+The experimental controls are:
 
-## Quick start
+- Each agent receives only its own private observation.
+- The recipient does not see global state, the oracle, or the sender's private
+  observation.
+- WITH adds only the frozen CandidateMessage.
+- WITHOUT uses the same recipient private observation without that message.
+- Deep copies and observation fingerprints verify that the recipient state is
+  otherwise equal.
+- PolicyEngine is consulted only after the recipient decision, to calculate
+  utility.
 
-### 1. Environment
+## 5. The three agents and communication edges
 
-```powershell
-python -m venv .venv
-.\.venv\Scripts\activate
-pip install -e ".[dev]"
-
-copy .env.example .env
-# set OPENROUTER_API_KEY=...
-```
-
-### 2. Database
-
-```powershell
-docker start olist_disputes_db
-# or: docker compose up -d postgres
-
-.\.venv\Scripts\python.exe -m scripts.import_olist_csv --data-dir data
-```
-
-Ingest is a **CSV → SQL COPY** (not RAG chunking). Run once unless you refresh data.
-
-### 3. Backend
-
-```powershell
-.\.venv\Scripts\python.exe scripts\run_api.py
-```
-
-- API: http://127.0.0.1:8000  
-- Docs: http://127.0.0.1:8000/docs  
-
-> On Windows, use `scripts/run_api.py` so psycopg gets a SelectorEventLoop.
-
-### 4. Frontend
-
-```powershell
-cd frontend
-npm.cmd install
-npm.cmd run dev
-```
-
-- UI: http://127.0.0.1:5173  
-
-### 5. Use the Desk
-
-1. Open the UI  
-2. **New case** → search/select an Olist `order_id` → write the customer claim  
-3. **Create & run investigation**  
-4. Wait for `completed`  
-5. Review Assessment / Evidence / Agent reports / Timeline  
-6. **Approve** or **Reject**
-
----
-
-## API surface (MVP)
-
-| Method | Path | Purpose |
+| Agent | Private evidence | Role in the experiment |
 | --- | --- | --- |
-| `GET` | `/api/health` | Liveness + DB ping |
-| `GET` | `/api/orders?search=` | Search Olist orders |
-| `GET` | `/api/cases` | List desk cases |
-| `POST` | `/api/cases` | Create case |
-| `GET` | `/api/cases/{id}` | Case + runs |
-| `POST` | `/api/cases/{id}/runs` | Start investigation |
-| `GET` | `/api/runs/{run_id}` | Run snapshot |
-| `POST` | `/api/cases/{id}/decision` | Approve / reject |
+| Order/Seller | Order status, items, seller records | Sends or receives order and seller evidence |
+| Payment | Payment rows, totals, payment structure | Sends or receives payment evidence |
+| Delivery | Delivery timeline and shipping deadlines | Sends or receives delivery evidence |
 
----
+Each of the three agents can send to the other two, producing six directed
+communication edges:
 
-## Design principles
+~~~text
+Order/Seller -> Payment
+Order/Seller -> Delivery
+Payment     -> Order/Seller
+Payment     -> Delivery
+Delivery    -> Order/Seller
+Delivery    -> Payment
+~~~
 
-1. **Supervisor, not swarm** — handoffs go through the Coordinator / graph edges  
-2. **Parallel specialists** — order, payment, delivery only read facts  
-3. **Shared evidence board** — one place to merge grounded IDs and verified facts  
-4. **Code owns money** — LLM never calculates refunds  
-5. **Fail closed on verification** — invalid schema / evidence / finance does not ship as success  
-6. **Secrets stay in `.env`** — model id stays in git for auditability  
+Each candidate message contains a case identifier, sender, recipient, compact
+content, and evidence identifiers. Sender messages are generated once and
+frozen before repeated recipient trials.
 
-More detail: [`architecture.md`](architecture.md)
+## 6. How message value is currently measured
 
----
+The original single paired run uses:
 
-## Data source
+~~~text
+V_star = U_with - U_without - lambda * communication_cost
+~~~
 
-[Brazilian E-Commerce Public Dataset by Olist](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce)
+Repeated trials use a separately named exploratory quantity:
 
----
+~~~text
+delta_mean_utility = mean(U_with) - mean(U_without)
+repeated_mean_value = delta_mean_utility - lambda * communication_cost
+~~~
 
-## Roadmap
+Current utility is deliberately simple:
 
-- [ ] Sample-case loader from `input/EC_*.json` in the UI  
-- [ ] Live pipeline SSE / WebSocket progress  
-- [ ] Lightweight auth for the desk  
-- [ ] Deploy compose stack (API + UI + Postgres)
+~~~text
+correct root cause   = 1
+incorrect root cause = 0
+~~~
 
----
+These are observed counterfactual values: both WITH and WITHOUT outcomes are
+actually executed. They are not a prospective estimator. In particular, no
+V_hat currently predicts value before a message is transmitted.
 
-## License
+## 7. What has been completed
 
-Personal / educational project. Olist dataset retains its original license terms.
+### Milestone 1 — Research harness and smoke test
+
+**Status: COMPLETE**
+
+The first real experiment established:
+
+- three private agents;
+- six directed candidate messages;
+- a controlled WITH vs WITHOUT counterfactual branch;
+- same-recipient-state fingerprint validation;
+- the deterministic PolicyEngine oracle; and
+- real Vertex/Gemini structured-output execution.
+
+The EC_001 run produced meaningful message-value differences between
+communication edges.
+
+### Milestone 2 — Stability study
+
+**Status: COMPLETE**
+
+The stability study checked whether an apparent communication effect could be
+explained only by repeated LLM sampling variability. For EC_001, every one of
+the six edges was evaluated with:
+
+~~~text
+10 WITH trials
+10 WITHOUT trials
+~~~
+
+This produced **120 recipient executions**. Fixed message hashes and
+observation fingerprints passed validation. The lowest modal action share was
+**0.80**, which was sufficient to proceed to a broader pilot while retaining
+the observed variability in the record.
+
+### Milestone 3 — Stratified six-case pilot
+
+**Status: COMPLETE**
+
+The pilot used one representative case for each of the six root-cause classes:
+
+~~~text
+6 cases × 6 communication edges × (5 WITH + 5 WITHOUT)
+= 360 recipient executions
+~~~
+
+The pilot observed:
+
+| Observed utility effect | Count |
+| --- | ---: |
+| Positive | 10 |
+| Zero | 24 |
+| Negative | 2 |
+
+Communication was therefore not universally useful in this pilot. Some messages
+helped, many did not change utility, and some reduced recipient correctness.
+This is pilot evidence, not a generalization claim.
+
+### Milestone 4 — Counterfactual Message-Value Dataset v1
+
+**Status: COMPLETE**
+
+Dataset v1 uses the full grounded case set, EC_001 through EC_050:
+
+| Root-cause class | Cases |
+| --- | ---: |
+| canceled_order_paid | 9 |
+| unavailable_order_paid | 9 |
+| late_delivery_seller | 8 |
+| late_delivery_logistics | 8 |
+| valid_split_payment | 8 |
+| unsupported_late_claim | 8 |
+
+Each case contributes six frozen directed candidate messages. Each message is
+evaluated with five WITH trials and five WITHOUT trials:
+
+~~~text
+50 cases
+300 candidate messages
+3,000 recipient counterfactual trials
+300 aggregated message-value samples
+~~~
+
+The final empirical utility-effect labels are:
+
+| Label | Count |
+| --- | ---: |
+| POSITIVE | 74 |
+| ZERO | 209 |
+| NEGATIVE | 17 |
+
+These labels describe the observed utility effect
+delta_mean_utility. They are not predictions from V_hat. Across the dataset, the
+mean modal share was approximately **0.97** for both WITH and WITHOUT conditions.
+
+## 8. One small example
+
+Consider the EC_001 edge Order/Seller -> Payment.
+
+- **WITHOUT message:** the Payment agent predicted valid_split_payment, which
+  was incorrect for the canceled_order_paid oracle case.
+- **WITH message:** the Order/Seller message included cancellation information,
+  and the Payment agent predicted canceled_order_paid, which was correct.
+
+For this candidate message, the observed utility improved from 0 to 1. It is a
+positive observed downstream effect.
+
+By contrast, on EC_001 the Payment -> Order/Seller recipient was already correct
+without the message and remained correct with it. That message had no utility
+improvement, although it still incurred communication cost. This is a redundant
+observed message under the current utility definition.
+
+## 9. What one Dataset v1 sample contains
+
+Conceptually, one row represents one case, sender, recipient, and frozen
+candidate message:
+
+~~~text
+(case, sender, recipient, candidate message)
+        |
+        +-- repeated WITHOUT outcomes
+        |
+        +-- repeated WITH outcomes
+        |
+        +-- delta_mean_utility
+        |
+        +-- communication cost
+        +-- repeated_mean_value
+~~~
+
+The main aggregated artifact is:
+
+~~~text
+experiments/pvoc_v0/results/dataset_v1/
+pvoc_v1_20260922T205457Z_483f9ca0/dataset.jsonl
+~~~
+
+The same run directory also contains frozen messages, raw recipient trials,
+case summaries, a manifest, and a summary file for reproducibility.
+
+## 10. Progress against the proposal
+
+~~~mermaid
+flowchart TD
+    A[Research environment<br/>three grounded agents] --> B[Private information separation]
+    B --> C[Counterfactual SEND vs DROP apparatus]
+    C --> D[Stability / reliability validation]
+    D --> E[Six-case pilot]
+    E --> F[Counterfactual message-value dataset]
+    F --> G[Prospective V_hat estimator<br/>NEXT]
+    G --> H[Selective communication policy]
+    H --> I[Baselines, budgets, ablations,<br/>generalization and final evaluation]
+    classDef done fill:#dcfce7,stroke:#15803d,color:#14532d;
+    classDef next fill:#fef3c7,stroke:#b45309,color:#78350f;
+    classDef later fill:#f3f4f6,stroke:#6b7280,color:#374151;
+    class A,B,C,D,E,F done;
+    class G next;
+    class H,I later;
+~~~
+
+The project has completed the measurement stage: it can estimate the true
+observed effect of a candidate message by running both counterfactual
+conditions. It has not completed the prospective prediction stage.
+
+## 11. Current position in the research question
+
+What exists now:
+
+~~~text
+candidate message
+        |
+        +--> actually run WITH
+        |
+        +--> actually run WITHOUT
+        |
+        v
+observed counterfactual value
+~~~
+
+What the research ultimately needs:
+
+~~~text
+candidate message
+        |
+        v
+prospective estimator V_hat
+        |
+        +---- high predicted value ---> SEND
+        |
+        +---- low predicted value ----> DROP
+~~~
+
+V_hat has **not** been implemented. There is no production selective router or
+SEND/DROP policy yet.
+
+## 12. Next steps
+
+The next stage is to define a leakage-safe prediction problem from Dataset v1.
+The intended order is:
+
+1. **Define legal pre-send features.** Features must be available to the sender
+   before communication. They must not contain downstream outcomes, oracle labels
+   unavailable at send time, WITH-condition results, or other future information.
+2. **Establish simple prospective-value baselines.** Possible baselines include
+   a heuristic, a simple supervised predictor, or an LLM-based value estimator.
+   The final method has not yet been selected.
+3. **Train and evaluate V_hat.** The target is to predict observed message value
+   before message transmission.
+4. **Turn prediction into selective communication.** A future policy could send
+   when V_hat(m) > threshold and otherwise drop the message.
+5. **Compare against communication baselines:** full communication, no
+   communication, random or budgeted communication, and existing merge-late
+   behavior where appropriate.
+6. **Evaluate trade-offs:** task correctness, message count, tokens, latency,
+   communication cost, and performance retained under communication budgets.
+7. **Later, test ablations and generalization** across recipients, root-cause
+   types, team configurations, and—if resources permit—other models or tasks.
+
+None of these prospective-estimation or selective-routing steps has been
+claimed as completed.
+
+## 13. Research-focused repository map
+
+~~~text
+multiAgent_research/
+|
+|-- experiments/pvoc_v0/
+|   |-- core/          # shared research primitives
+|   |-- studies/       # smoke, stability, pilot, Dataset v1
+|   |-- results/       # frozen experiment artifacts
+|   |-- cli.py         # unified study entry point
+|
+|-- data/input/        # grounded EC case inputs
+|-- src/               # original Olist application/environment
+|-- tests/experiments/ # research tests
+~~~
+
+A supervisor interested in the research should start at
+[experiments/pvoc_v0/](experiments/pvoc_v0/). The internal README there
+contains technical run commands and artifact details; this root README explains
+the research progression and current position.
+
+## Research boundaries
+
+- Dataset v1 is an observed-value dataset, not a learned value estimator.
+- Current utility is binary correctness against the deterministic oracle.
+- The experiments use one grounded Olist environment and do not establish
+  generalization beyond it.
+- No learned V_hat estimator exists yet.
+- No production selective communication router exists yet.
+- The current work does not claim causal proof or a completed selective
+  communication policy.
